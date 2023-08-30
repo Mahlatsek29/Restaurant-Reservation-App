@@ -17,6 +17,7 @@ const ReservationScreen = ({ route }) => {
         <Text>{selectedRestaurantName}</Text>
         <Text>{selectedRestaurantDescription}</Text>
         <Text>{selectedRestaurantLocation}</Text>
+        <Text>{selectedRestaurantLocation}</Text>
       </View>
     </View>
   );
