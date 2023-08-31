@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import restaurants from '../components/Restuarants'; // Make sure the path is correct
+import restaurants from '../components/Restuarants'; 
 import images from '../components/images';
 
 const RestaurantsListScreen = () => {
@@ -13,16 +13,20 @@ const RestaurantsListScreen = () => {
         {restaurants.map((restaurant) => (
           <View style={styles.col} key={restaurant.id}>
             <View style={styles.card}>
-              <Image
-                source={images[restaurant.image]} 
-                style={styles.cardImgTop}
-              />
+              <Image source={images[restaurant.image]} style={styles.cardImgTop} />
               <View style={styles.cardBody}>
                 <Text style={styles.cardTitle}>{restaurant.name}</Text>
                 <Text style={styles.cardText}>{restaurant.location}</Text>
                 <TouchableOpacity
                   style={styles.viewButton}
-                  onPress={() => navigation.push('ReservationsScreen', restaurant)}
+                  onPress={() =>
+                    navigation.navigate('ReservationsScreen', {
+                      selectedRestaurantName: restaurant.name,
+                      selectedRestaurantDescription: restaurant.description,
+                      selectedRestaurantImage: restaurant.image,
+                      selectedRestaurantLocation: restaurant.location,
+                    })
+                  }
                 >
                   <Text style={styles.viewButtonText}>View</Text>
                 </TouchableOpacity>
@@ -52,7 +56,7 @@ const styles = StyleSheet.create({
   card: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 8,
+    borderRadius: 10,
     overflow: 'hidden',
   },
   cardImgTop: {

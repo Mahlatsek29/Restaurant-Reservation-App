@@ -59,15 +59,15 @@ const HomeContent = ({ navigation }) => {
       <View style={styles.container}>
       <View ><Dashboard/></View>
         <Image source={require('../assets/logo1.png')} style={styles.logo} />
-        <TextInput
+        {/* <TextInput
           style={styles.searchBar}
           placeholder="Search?"
           placeholderTextColor="#FFFFFF"
           textAlign="center"
           textAlignVertical="center"
-        />
+        /> */}
         <TouchableOpacity style={styles.button} onPress={handleBookTable}>
-          <Text style={styles.buttonText}>Reserve-Table</Text>
+          <Text style={styles.buttonText}>Restuarants</Text>
         </TouchableOpacity>
     
       </View>
