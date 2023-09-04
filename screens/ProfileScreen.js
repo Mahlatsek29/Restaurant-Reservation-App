@@ -20,14 +20,14 @@ const ProfileScreen = () => {
         style={styles.input}
         value={name}
         onChangeText={setName}
-        placeholder="Full Name"
+        placeholder="Name"
       />
       <TextInput
         style={styles.input}
         value={email}
         onChangeText={setEmail}
         placeholder="Email"
-        keyboardType="email-address"
+        keyboardType="email"
       />
       <TextInput
         style={styles.input}
