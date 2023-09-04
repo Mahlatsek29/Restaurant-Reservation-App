@@ -1,67 +1,97 @@
-import React, { useState } from 'react';
-import { Button, StyleSheet, Text, View, TextInput } from 'react-native'; // Add TextInput import
-import DateTimePicker from '@react-native-community/datetimepicker';
+import React, { useState } from "react";
+import { View, Image, Text, TextInput, Button, StyleSheet } from "react-native";
+import images from "../components/images";
+import logo2 from '../assets/logo2.png';
+import { firebase } from "../config";
 
-const MyDatePicker = ({ selectedDate, onDateChange, showDatePicker, setShowDatePicker }) => {
-  const onInternalDateChange = (event, selected) => {
-    if (selected) {
-      onDateChange(selected);
+const MakeReservationScreen = ({ route }) => {
+  const {
+    selectedRestaurantName,
+    selectedRestaurantDescription,
+    selectedRestaurantImage,
+    selectedRestaurantLocation,
+    selectedDate,
+    selectedTime,
+    numberOfGuests,
+  } = route.params;
+
+  const db = firebase.firestore();
+  
+  const [editedDate, setEditedDate] = useState(selectedDate);
+  const [editedTime, setEditedTime] = useState(selectedTime);
+  const [editedGuests, setEditedGuests] = useState(numberOfGuests);
+
+  const handleConfirmReservation = () => {
+    if (!editedDate || !editedTime || !editedGuests) {
+      alert("Please fill out all fields before confirming the reservation.");
+      return;
     }
-    setShowDatePicker(false);
-  };
 
-  return (
-    <View>
-      <Button title="Select Date" onPress={() => setShowDatePicker(true)} />
-      {showDatePicker && (
-        <DateTimePicker
-          value={selectedDate}
-          mode="date"
-          display=""
-          onChange={onInternalDateChange}
-        />
-      )}
-      <Text>Selected Date: {selectedDate.toDateString()}</Text>
-    </View>
-  );
+    db.collection("reservations")
+    .add({
+      restaurantName: selectedRestaurantName,
+      restaurantDescription: selectedRestaurantDescription,
+      restaurantLocation: selectedRestaurantLocation,
+      date: editedDate,
+      time: editedTime,
+      guests: parseInt(editedGuests, 10), // Parse guests to an integer
+    })
+    .then(() => {
+      console.log("Reservation added to Firestore!");
+      // You can navigate to a success screen or perform other actions here
+    })
+    .catch((error) => {
+      console.error("Error adding reservation to Firestore: ", error);
+    });
 };
-
-const MakeReservationScreen = ({ navigation }) => {
-  const [date, setDate] = useState(new Date());
-  const [time, setTime] = useState('');
-  const [guests, setGuests] = useState('');
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
-  const handleSubmit = () => {
-    navigation.navigate('Confirmation', { date, time, guests });
-  };
-
-  const handleDateChange = newDate => {
-    setDate(newDate);
-  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Make a Reservation</Text>
-      <MyDatePicker
-        selectedDate={date}
-        onDateChange={handleDateChange}
-        showDatePicker={showDatePicker}
-        setShowDatePicker={setShowDatePicker}
+      <Image source={logo2} style={styles.logo2} />
+      <Image
+        source={images[selectedRestaurantImage]}
+        style={styles.restaurantImage}
       />
+      <Text style={styles.text}>{selectedRestaurantName}</Text>
+      <Text style={styles.text}>{selectedRestaurantDescription}</Text>
+      <Text style={styles.text}>{selectedRestaurantLocation}</Text>
+
+      <Text style={styles.text}>Selected Date: {editedDate}</Text>
       <TextInput
         style={styles.input}
-        placeholder="Time"
-        value={time}
-        onChangeText={setTime}
+        value={editedDate}
+        onChangeText={setEditedDate}
+        placeholder="Edit Date"
       />
+
+      <Text style={styles.text}>Selected Time: {editedTime}</Text>
       <TextInput
         style={styles.input}
-        placeholder="Number of Guests"
-        value={guests}
-        onChangeText={setGuests}
+        value={editedTime}
+        onChangeText={setEditedTime}
+        placeholder="Edit Time"
       />
-      <Button title="Submit Reservation" onPress={handleSubmit} />
+
+      <Text style={styles.text}>Number of Guests: {editedGuests}</Text>
+      <TextInput
+         style={styles.input}
+         value={editedGuests.toString()}
+         onChangeText={(text) => {
+           const parsedValue = parseInt(text, 10);
+           if (!isNaN(parsedValue)) {
+             setEditedGuests(parsedValue);
+           } else {
+             setEditedGuests(""); // Clear the input if it's not a valid number
+           }
+         }}
+         placeholder="Edit Number of Guests"
+         keyboardType="numeric"
+       />
+
+      <Button
+        title="Confirm Reservation"
+        onPress={handleConfirmReservation}
+      />
     </View>
   );
 };
@@ -69,18 +99,31 @@ const MakeReservationScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "black",
   },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+  logo2: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+    borderRadius: 50,
+  },
+  restaurantImage: {
+    width: "90%",
+    height: 250,
+    marginBottom: 10,
+  },
+  text: {
+    color: "white",
+    marginBottom: 5,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
+    width: "80%",
+    height: 40,
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
     marginBottom: 10,
+    paddingLeft: 10,
   },
 });
 

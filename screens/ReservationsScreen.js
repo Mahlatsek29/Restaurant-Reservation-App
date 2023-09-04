@@ -1,10 +1,20 @@
 import React, { useState } from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import images from "../components/images";
 import { Calendar } from "react-native-calendars";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { firebase } from "../config";
+
+const db = firebase.firestore();
 
 const ReservationScreen = ({ route }) => {
   const [selectedDate, setSelectedDate] = useState("");
@@ -26,7 +36,24 @@ const ReservationScreen = ({ route }) => {
     navigation.goBack();
   };
 
+  const storeReservationData = () => {
+    db.collection("reservations")
+      .add({
+        restaurantName: selectedRestaurantName,
+        date: selectedDate,
+        time: selectedTime,
+        numberOfGuests: parseInt(numberOfGuests),
+      })
+      .then(() => {
+        console.log("Reservation data stored successfully!");
+      })
+      .catch((error) => {
+        console.error("Error storing reservation data:", error);
+      });
+  };
+
   const handleSubmit = () => {
+    storeReservationData();
     navigation.navigate("MakeReservation", {
       selectedRestaurantName,
       selectedRestaurantDescription,
@@ -48,7 +75,7 @@ const ReservationScreen = ({ route }) => {
 
   const handleDateConfirm = (date) => {
     hideDatePicker();
-    setSelectedDate(date.toISOString().slice(0, 10)); // Format the date as needed
+    setSelectedDate(date.toISOString().slice(0, 10));
   };
 
   const showTimePicker = () => {
@@ -61,69 +88,93 @@ const ReservationScreen = ({ route }) => {
 
   const handleTimeConfirm = (time) => {
     hideTimePicker();
-    setSelectedTime(time.toLocaleTimeString()); // Format the time as needed
+    setSelectedTime(time.toLocaleTimeString());
   };
 
   const handleIncrementGuests = () => {
-    setNumberOfGuests((prevGuests) => (prevGuests === "" ? 1 : prevGuests + 1));
+    setNumberOfGuests((prevGuests) =>
+      prevGuests === "" ? 1 : parseInt(prevGuests) + 1
+    );
   };
 
   const handleDecrementGuests = () => {
-    setNumberOfGuests((prevGuests) => (prevGuests === "" || prevGuests === 0 ? "" : prevGuests - 1));
+    setNumberOfGuests((prevGuests) =>
+      prevGuests === "" || prevGuests === 0 ? "" : parseInt(prevGuests) - 1
+    );
   };
 
   return (
     <View style={styles.container}>
-      <Image source={images[selectedRestaurantImage]} style={styles.restaurantImage} />
+      <TouchableOpacity onPress={handleBackButton} style={styles.backButton}>
+        <AntDesign name="arrowleft" size={20} color="white" />
+        <Text style={styles.whiteButtonText}>Back</Text>
+      </TouchableOpacity>
+
+      <Image
+        source={images[selectedRestaurantImage]}
+        style={styles.restaurantImage}
+      />
       <Text style={styles.whiteText}>{selectedRestaurantName}</Text>
       <Text style={styles.whiteText}>{selectedRestaurantDescription}</Text>
       <Text style={styles.whiteText}>{selectedRestaurantLocation}</Text>
 
-      <TouchableOpacity onPress={handleBackButton} style={styles.backButton}>
-        <AntDesign name="arrowleft" size={20} color="black" />
-        <Text style={styles.blackButtonText}>Back</Text>
-      </TouchableOpacity>
-
       <TouchableOpacity onPress={showDatePicker} style={styles.calendarButton}>
-        <Text style={styles.calendarButtonText}>Select Date: {selectedDate || "Pick a date"}</Text>
+        <Text style={styles.calendarButtonText}>
+          Select Date: {selectedDate || "Pick a date"}
+        </Text>
       </TouchableOpacity>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
         onConfirm={handleDateConfirm}
         onCancel={hideDatePicker}
+        headerTextIOS="Pick a Date"
+        confirmTextIOS="Confirm"
+        cancelTextIOS="Cancel"
+        date={new Date()}
+        modalStyle={styles.datePickerModal}
+        pickerContainerStyleIOS={styles.datePickerContainer}
       />
 
       <TouchableOpacity onPress={showTimePicker} style={styles.calendarButton}>
-        <Text style={styles.calendarButtonText}>Select Time: {selectedTime || "Pick a time"}</Text>
+        <Text style={styles.calendarButtonText}>
+          Select Time: {selectedTime || "Pick a time"}
+        </Text>
       </TouchableOpacity>
       <DateTimePickerModal
         isVisible={isTimePickerVisible}
         mode="time"
         onConfirm={handleTimeConfirm}
         onCancel={hideTimePicker}
+        headerTextIOS="Pick a Time"
+        confirmTextIOS="Confirm"
+        cancelTextIOS="Cancel"
+        date={new Date()}
+        modalStyle={styles.timePickerModal}
+        pickerContainerStyleIOS={styles.timePickerContainer}
       />
 
-      <View style={styles.guestsContainer}>
-        <Text style={styles.guestsLabel}>Number of Guests:</Text>
-        <View style={styles.guestsControls}>
-          <TouchableOpacity onPress={handleDecrementGuests} style={styles.guestControlButton}>
-            <Text style={styles.guestControlText}>-</Text>
-          </TouchableOpacity>
-          <TextInput
-            style={styles.guestInputField}
-            placeholder="0"
-            keyboardType="numeric"
-            value={numberOfGuests.toString()}
-            onChangeText={setNumberOfGuests}
-          />
-          <TouchableOpacity onPress={handleIncrementGuests} style={styles.guestControlButton}>
-            <Text style={styles.guestControlText}>+</Text>
-          </TouchableOpacity>
-        </View>
+      <Text style={styles.guestsLabel}>Number of Guests:</Text>
+      <View style={styles.guestsControls}>
+        <TouchableOpacity onPress={handleDecrementGuests} style={styles.guestControlButton}>
+          <Text style={styles.guestControlText}>-</Text>
+        </TouchableOpacity>
+        <TextInput
+          style={styles.guestInputField}
+          placeholder="0"
+          keyboardType="numeric"
+          value={numberOfGuests.toString()}
+          onChangeText={(text) => setNumberOfGuests(text)}
+        />
+        <TouchableOpacity onPress={handleIncrementGuests} style={styles.guestControlButton}>
+          <Text style={styles.guestControlText}>+</Text>
+        </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.reservationButton} onPress={handleSubmit}>
+      <TouchableOpacity
+        style={styles.reservationButton}
+        onPress={handleSubmit} 
+      >
         <Text style={styles.reservationButtonText}>Make Reservation</Text>
       </TouchableOpacity>
     </View>
@@ -153,28 +204,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
-    backgroundColor: "white",
+    backgroundColor: "black",
     borderRadius: 25,
   },
-  blackButtonText: {
-    color: "black",
-    textAlign: "center",
+  whiteButtonText: {
+    color: "white",
+    marginLeft: 5,
   },
   calendarButton: {
     marginTop: 20,
-    backgroundColor: "white",
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 25,
   },
   calendarButtonText: {
-    color: "black",
+    color: "white",
     textAlign: "center",
-  },
-  guestsContainer: {
-    marginTop: 20,
-    flexDirection: "row",
-    alignItems: "center",
   },
   guestsLabel: {
     color: "white",
@@ -185,17 +231,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   guestControlButton: {
-    backgroundColor: "white",
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 25,
   },
   guestControlText: {
-    color: "black",
+    color: "white",
     fontSize: 18,
   },
   guestInputField: {
-    backgroundColor: "white",
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
     width: 40,
     padding: 5,
     textAlign: "center",
@@ -204,15 +250,26 @@ const styles = StyleSheet.create({
   },
   reservationButton: {
     marginTop: 20,
-    backgroundColor: "white",
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
   },
   reservationButtonText: {
-    color: "black",
+    color: "white",
     textAlign: "center",
-    borderRadius: 25,
+  },
+  datePickerModal: {
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
+  datePickerContainer: {
+    backgroundColor: "black",
+  },
+  timePickerModal: {
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
+  timePickerContainer: {
+    backgroundColor: "black",
   },
 });
 
