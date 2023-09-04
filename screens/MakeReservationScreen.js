@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Image, Text, TextInput, Button, StyleSheet } from "react-native";
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 import images from "../components/images";
 import logo2 from '../assets/logo2.png';
 import { firebase } from "../config";
@@ -16,7 +17,8 @@ const MakeReservationScreen = ({ route }) => {
   } = route.params;
 
   const db = firebase.firestore();
-  
+  const navigation = useNavigation(); // Initialize the navigation object
+
   const [editedDate, setEditedDate] = useState(selectedDate);
   const [editedTime, setEditedTime] = useState(selectedTime);
   const [editedGuests, setEditedGuests] = useState(numberOfGuests);
@@ -27,23 +29,19 @@ const MakeReservationScreen = ({ route }) => {
       return;
     }
 
-    db.collection("reservations")
-    .add({
+    // Prepare the data to pass to the ConfirmationScreen
+    const reservationData = {
       restaurantName: selectedRestaurantName,
-      restaurantDescription: selectedRestaurantDescription,
+      restaurantImage: images[selectedRestaurantImage],
       restaurantLocation: selectedRestaurantLocation,
       date: editedDate,
       time: editedTime,
-      guests: parseInt(editedGuests, 10), // Parse guests to an integer
-    })
-    .then(() => {
-      console.log("Reservation added to Firestore!");
-      // You can navigate to a success screen or perform other actions here
-    })
-    .catch((error) => {
-      console.error("Error adding reservation to Firestore: ", error);
-    });
-};
+      guests: parseInt(editedGuests, 10),
+    };
+
+    // Navigate to the ConfirmationScreen and pass the data as a parameter
+    navigation.navigate('ConfirmationScreen', { reservationData });
+  };
 
   return (
     <View style={styles.container}>
@@ -81,7 +79,7 @@ const MakeReservationScreen = ({ route }) => {
            if (!isNaN(parsedValue)) {
              setEditedGuests(parsedValue);
            } else {
-             setEditedGuests(""); // Clear the input if it's not a valid number
+             setEditedGuests(""); 
            }
          }}
          placeholder="Edit Number of Guests"
