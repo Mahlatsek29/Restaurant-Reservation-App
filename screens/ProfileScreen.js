@@ -1,28 +1,42 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
 const ProfileScreen = () => {
-  const [userInfo, setUserInfo] = useState({
-    username: "JohnDoe",
-    name: "John",
-    surname: "Doe",
-    email: "john@example.com",
-    phone: "123-456-7890",
-  });
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSaveProfile = () => {
+  
+    console.log('Name:', name);
+    console.log('Email:', email);
+    console.log('Password:', password);
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>User Profile</Text>
-      <Text style={styles.label}>Username:</Text>
-      <Text style={styles.text}>{userInfo.username}</Text>
-      <Text style={styles.label}>Name:</Text>
-      <Text style={styles.text}>{userInfo.name}</Text>
-      <Text style={styles.label}>Surname:</Text>
-      <Text style={styles.text}>{userInfo.surname}</Text>
-      <Text style={styles.label}>Email:</Text>
-      <Text style={styles.text}>{userInfo.email}</Text>
-      <Text style={styles.label}>Phone:</Text>
-      <Text style={styles.text}>{userInfo.phone}</Text>
+      <Text style={styles.title}>Profile Settings</Text>
+      <TextInput
+        style={styles.input}
+        value={name}
+        onChangeText={setName}
+        placeholder="Full Name"
+      />
+      <TextInput
+        style={styles.input}
+        value={email}
+        onChangeText={setEmail}
+        placeholder="Email"
+        keyboardType="email-address"
+      />
+      <TextInput
+        style={styles.input}
+        value={password}
+        onChangeText={setPassword}
+        placeholder="New Password"
+        secureTextEntry={true}
+      />
+      <Button title="Save Profile" onPress={handleSaveProfile} />
     </View>
   );
 };
@@ -30,21 +44,23 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 16,
   },
-  heading: {
+  title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 20,
   },
-  label: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  text: {
-    fontSize: 16,
-    marginBottom: 15,
+  input: {
+    width: '100%',
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
   },
 });
 

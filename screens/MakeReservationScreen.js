@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Image, Text, TextInput, Button, StyleSheet } from "react-native";
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation
+import { useNavigation } from '@react-navigation/native'; 
 import images from "../components/images";
 import logo2 from '../assets/logo2.png';
 import { firebase } from "../config";
@@ -17,7 +17,7 @@ const MakeReservationScreen = ({ route }) => {
   } = route.params;
 
   const db = firebase.firestore();
-  const navigation = useNavigation(); // Initialize the navigation object
+  const navigation = useNavigation(); 
 
   const [editedDate, setEditedDate] = useState(selectedDate);
   const [editedTime, setEditedTime] = useState(selectedTime);
@@ -29,7 +29,6 @@ const MakeReservationScreen = ({ route }) => {
       return;
     }
 
-    // Prepare the data to pass to the ConfirmationScreen
     const reservationData = {
       restaurantName: selectedRestaurantName,
       restaurantImage: images[selectedRestaurantImage],
@@ -39,7 +38,6 @@ const MakeReservationScreen = ({ route }) => {
       guests: parseInt(editedGuests, 10),
     };
 
-    // Navigate to the ConfirmationScreen and pass the data as a parameter
     navigation.navigate('ConfirmationScreen', { reservationData });
   };
 
