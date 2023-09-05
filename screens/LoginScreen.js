@@ -55,6 +55,14 @@ const LoginScreen = () => {
           Don't have an account? Register
         </Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Admin")}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={{ fontWeight: "light", fontSize: 16 }}>
+          Login as Admin
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };

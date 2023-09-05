@@ -10,6 +10,7 @@ import ReservationListScreen from './screens/ReservationListScreen';
 import ReservationsScreen from './screens/ReservationsScreen'
 import MakeReservationScreen from './screens/MakeReservationScreen';
 import ConfirmationScreen from './screens/ConfirmationScreen';
+import AdminScreen from './screens/AdminScreen';
 
 const Stack = createStackNavigator();
 
@@ -73,6 +74,11 @@ function App() {
            <Stack.Screen 
           name="ConfirmationScreen" 
           component={ConfirmationScreen} 
+          options={{headerShown: false}}
+          />
+           <Stack.Screen 
+          name="Admin" 
+          component={AdminScreen} 
           options={{headerShown: false}}
           />
           </Stack.Navigator>
