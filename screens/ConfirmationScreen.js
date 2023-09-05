@@ -102,6 +102,10 @@ const ConfirmationScreen = ({ route }) => {
       <TouchableOpacity onPress={onFinishedPress} style={styles.finishedButton}>
         <Text style={styles.finishedButtonText}>Finished</Text>
       </TouchableOpacity>
+
+      <Text style={styles.thankYouMessage}>
+        Thank you for using TableNumber. You can view your Reservations in your Profile.
+      </Text>
     </View>
   );
 };
@@ -163,6 +167,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
     marginBottom: 20,
+  },
+  thankYouMessage: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
+    color: 'white',
   },
 });
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { firebase } from "../config";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const ProfileScreen = () => {
   const [name, setName] = useState("");
@@ -22,7 +23,7 @@ const ProfileScreen = () => {
             const userData = snapshot.data();
             setName(userData.name);
           } else {
-            console.log('User does not exist');
+            console.log("User does not exist");
           }
         });
 
@@ -43,7 +44,7 @@ const ProfileScreen = () => {
 
       setReservations(reservationData);
     } catch (error) {
-      console.error('Error fetching reservations:', error);
+      console.error("Error fetching reservations:", error);
     }
   };
 
@@ -59,34 +60,33 @@ const ProfileScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.centeredContent}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-          {name}
-        </Text>
-        <Text style={{ fontSize: 18 }}>
-          {email}
-        </Text>
+        <Text style={styles.headerText}>{name}</Text>
+        <Text style={styles.emailText}>{email}</Text>
 
-        <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 20 }}>
-          Your Reservations:
-        </Text>
+        <Text style={styles.reservationsHeader}>Your Reservations:</Text>
 
         <FlatList
           data={reservations}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <View style={styles.reservationItem}>
-              <Text>{item.restaurantName}</Text>
-              <Text>Date: {item.date}</Text>
-              <Text>Time: {item.time}</Text>
-              {/* Add more reservation details here */}
+              <Icon name="cutlery" size={20} color="white" style={styles.icon} />
+              <Text style={styles.reservationItemLabel}></Text>
+              <Text style={styles.reservationItemText}>{item.restaurantName}</Text>
+
+              <Icon name="calendar" size={20} color="white" style={styles.icon} />
+              <Text style={styles.reservationItemLabel}></Text>
+              <Text style={styles.reservationItemText}>{item.date}</Text>
+
+              <Icon name="clock-o" size={20} color="white" style={styles.icon} />
+              <Text style={styles.reservationItemLabel}></Text>
+              <Text style={styles.reservationItemText}>{item.time}</Text>
             </View>
           )}
         />
 
         <TouchableOpacity onPress={handleLogOut} style={styles.button}>
-          <Text style={styles.buttonText}>
-            Log Out
-          </Text>
+          <Text style={styles.buttonText}>Log Out</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -96,32 +96,63 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
   },
   centeredContent: {
-    flex: 1,
+    flex: 20,
     justifyContent: "center",
     alignItems: "center",
-    width: "80%", // Adjust the width as needed
+    width: "100%",
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
+  },
+  emailText: {
+    fontSize: 18,
+    color: "white",
+  },
+  reservationsHeader: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginTop: 20,
+    color: "white",
   },
   button: {
-    backgroundColor: 'black',
+    backgroundColor: "black",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 25,
-    marginTop: 20, // Adjust the margin as needed
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: "white",
   },
   buttonText: {
-    color: '#fff',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   reservationItem: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    padding: 15,
+    flexDirection: "column",
+    borderWidth: 10,
+    borderColor: "gray",
+    padding: 30,
     marginBottom: 10,
+    borderRadius: 25
+  },
+  reservationItemLabel: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  reservationItemText: {
+    color: "white",
+    marginLeft: 5,
+  },
+  icon: {
+    marginRight: 5,
   },
 });
 
