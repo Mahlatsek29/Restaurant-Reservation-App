@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { View, Image, Text, TextInput, Button, StyleSheet } from "react-native";
+import { View, Image, Text, TextInput, Button, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native'; 
 import images from "../components/images";
-import logo2 from '../assets/logo2.png';
+import { AntDesign } from "@expo/vector-icons";
 import { firebase } from "../config";
 
 const MakeReservationScreen = ({ route }) => {
@@ -16,13 +16,18 @@ const MakeReservationScreen = ({ route }) => {
     numberOfGuests,
   } = route.params;
 
-  const db = firebase.firestore();
   const navigation = useNavigation(); 
+
+  const handleBackButton = () => {
+    navigation.goBack();
+  };
+
+  const db = firebase.firestore();
 
   const [editedDate, setEditedDate] = useState(selectedDate);
   const [editedTime, setEditedTime] = useState(selectedTime);
   const [editedGuests, setEditedGuests] = useState(numberOfGuests);
-
+  
   const handleConfirmReservation = () => {
     if (!editedDate || !editedTime || !editedGuests) {
       alert("Please fill out all fields before confirming the reservation.");
@@ -43,7 +48,10 @@ const MakeReservationScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <Image source={logo2} style={styles.logo2} />
+       <TouchableOpacity onPress={handleBackButton} style={styles.backButton}>
+        <AntDesign name="arrowleft" size={20} color="white" />
+        <Text style={styles.whiteButtonText}>Back</Text>
+      </TouchableOpacity>
       <Image
         source={images[selectedRestaurantImage]}
         style={styles.restaurantImage}
@@ -87,6 +95,7 @@ const MakeReservationScreen = ({ route }) => {
       <Button
         title="Confirm Reservation"
         onPress={handleConfirmReservation}
+        style={styles.confirmButton} 
       />
     </View>
   );
@@ -98,12 +107,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "black",
-  },
-  logo2: {
-    width: 100,
-    height: 100,
-    marginBottom: 10,
-    borderRadius: 50,
   },
   restaurantImage: {
     width: "90%",
@@ -120,6 +123,23 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.3)",
     marginBottom: 10,
     paddingLeft: 10,
+  },
+  backButton: {
+    position: "absolute",
+    top: 75,
+    left: 40,
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    backgroundColor: "black",
+    borderRadius: 25,
+  },
+  confirmButton: {
+    marginTop: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
   },
 });
 

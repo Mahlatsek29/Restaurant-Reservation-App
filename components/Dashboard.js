@@ -23,7 +23,7 @@ const Dashboard = () => {
     }
   }, []);
 
-  const handleLogout = () => {
+  const handleLogOut = () => {
     firebase.auth().logOut().catch((error) => {
       console.error("Error logging out:", error);
     });
@@ -34,7 +34,7 @@ const Dashboard = () => {
       <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
         Hello, {name.name}
       </Text>
-      <TouchableOpacity onPress={handleLogout} style={styles.button}>
+      <TouchableOpacity onPress={handleLogOut} style={styles.button}>
         <Text style={styles.buttonText}>
           Log Out
         </Text>

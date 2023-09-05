@@ -6,9 +6,11 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { firebase } from "../config";
 
 const RegistrationScreen = () => {
+  const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -71,7 +73,16 @@ const RegistrationScreen = () => {
           <Text style={{ fontWeight: "light", fontSize: 22, color: "#fff" }}>
             Register
           </Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
+          <TouchableOpacity
+        onPress={() => navigation.navigate("Login")}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={{ fontWeight: "light", fontSize: 16 }}>
+          Already have an account? Login
+        </Text>
+      </TouchableOpacity>
+        
       </View>
     </View>
   );

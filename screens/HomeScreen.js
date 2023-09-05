@@ -1,26 +1,31 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, ImageBackground, Image, StyleSheet} from 'react-native';
+import { View, Text, ImageBackground, Image, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfileScreen from './ProfileScreen';
 import ReservationListScreen from './ReservationListScreen';
 import Dashboard from '../components/Dashboard';
+import AdminScreen from './AdminScreen.js'; 
 
 const Tab = createBottomTabNavigator();
 
-const HomeScreen = ({ navigation}) => {
+const HomeScreen = ({ navigation }) => {
   return (
-<Tab.Navigator
-  screenOptions={{
-    tabBarShowLabel: false,
-  }}
->
+    <Tab.Navigator
+      screenOptions={{
+        tabBarShowLabel: false,
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={HomeContent}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Ionicons name={focused ? 'home' : 'home-outline'} size={30} color={focused ? '#000' : '#888'} />
+            <Ionicons
+              name={focused ? 'home' : 'home-outline'}
+              size={30}
+              color={focused ? '#000' : '#888'}
+            />
           ),
         }}
       />
@@ -29,7 +34,11 @@ const HomeScreen = ({ navigation}) => {
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Ionicons name={focused ? 'person' : 'person-outline'} size={30} color={focused ? '#000' : '#888'} />
+            <Ionicons
+              name={focused ? 'person' : 'person-outline'}
+              size={30}
+              color={focused ? '#000' : '#888'}
+            />
           ),
         }}
       />
@@ -38,14 +47,31 @@ const HomeScreen = ({ navigation}) => {
         component={ReservationListScreen}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Ionicons name={focused ? 'book' : 'book-outline'} size={30} color={focused ? '#000' : '#888'} />
+            <Ionicons
+              name={focused ? 'book' : 'book-outline'}
+              size={30}
+              color={focused ? '#000' : '#888'}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Admin"
+        component={AdminScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name={focused ? 'cog' : 'cog-outline'} 
+              size={30}
+              color={focused ? '#000' : '#888'}
+            />
           ),
         }}
       />
     </Tab.Navigator>
-    
   );
 };
+
 
 const HomeContent = ({ navigation }) => {
   const handleBookTable = () => {
@@ -66,9 +92,6 @@ const HomeContent = ({ navigation }) => {
           textAlign="center"
           textAlignVertical="center"
         /> */}
-        <TouchableOpacity style={styles.button} onPress={handleBookTable}>
-          <Text style={styles.buttonText}>Restuarants</Text>
-        </TouchableOpacity>
     
       </View>
     </ImageBackground>
