@@ -1,54 +1,101 @@
-// AdminScreen.js
 import React, { useState } from 'react';
-import { View, Text, Button, TextInput, FlatList, StyleSheet } from 'react-native';
+import { View, Text, Button, TextInput, FlatList, StyleSheet, Modal } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const AdminScreen = () => {
-  const [items, setItems] = useState([]);
-  const [itemName, setItemName] = useState('');
+  const [restaurants, setRestaurants] = useState([]);
+  const [restaurantName, setRestaurantName] = useState('');
+  const [bookingStats, setBookingStats] = useState({ weeklyStats: 0, monthlyStats: 0 });
+  const [showRestaurantList, setShowRestaurantList] = useState(false); // To control the visibility of the restaurant list modal
 
-  const addItem = () => {
-    if (itemName.trim() === '') {
+  const addRestaurant = () => {
+    if (restaurantName.trim() === '') {
       return;
     }
 
-    // Create a new item with a unique ID
-    const newItem = {
+    const newRestaurant = {
       id: Math.random().toString(),
-      name: itemName,
+      name: restaurantName,
     };
 
-    // Update the items list with the new item
-    setItems((prevItems) => [...prevItems, newItem]);
-
-    // Clear the input field
-    setItemName('');
+    setRestaurants((prevRestaurants) => [...prevRestaurants, newRestaurant]);
+    setRestaurantName('');
   };
 
-  const deleteItem = (itemId) => {
-    // Filter out the item with the provided ID
-    setItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+  // Placeholder functions for edit, delete, and view bookings
+  const editRestaurant = (restaurantId, updatedDetails) => {
+    // Implement edit logic here
+  };
+
+  const deleteRestaurant = (restaurantId) => {
+    // Implement delete logic here
+  };
+
+  const viewBookings = (restaurantId) => {
+    // Implement code to view bookings for the selected restaurant
+    // You can navigate to a new screen or show a modal to display bookings.
+    // For simplicity, let's just log the selected restaurant's ID for now.
+    console.log(`View bookings for restaurant with ID: ${restaurantId}`);
+  };
+
+  const generateBookingStatistics = () => {
+    // Implement your logic to calculate weeklyStats and monthlyStats here
+    // For demonstration purposes, let's set some dummy values.
+    const calculatedStats = {
+      weeklyStats: 50, // Replace with your calculation
+      monthlyStats: 200, // Replace with your calculation
+    };
+    setBookingStats(calculatedStats);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Admin Screen</Text>
+      <Text style={styles.title}>Restaurant Listing Management</Text>
       <TextInput
         style={styles.input}
-        placeholder="Enter item name"
-        value={itemName}
-        onChangeText={(text) => setItemName(text)}
+        placeholder="Enter restaurant name"
+        value={restaurantName}
+        onChangeText={(text) => setRestaurantName(text)}
       />
-      <Button title="Add Item" onPress={addItem} />
-      <FlatList
-        data={items}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text>{item.name}</Text>
-            <Button title="Delete" onPress={() => deleteItem(item.id)} />
-          </View>
-        )}
+      <Button title="Add Restaurant" onPress={addRestaurant} />
+      
+      {/* Button to open the restaurant list modal */}
+      <Button
+        title="View Restaurants"
+        onPress={() => setShowRestaurantList(true)}
       />
+
+      {/* Rest of your component code */}
+      
+      <Modal
+        visible={showRestaurantList}
+        animationType="slide"
+        transparent={false}
+      >
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>List of Restaurants</Text>
+          <FlatList
+            data={restaurants}
+            keyExtractor={(restaurant) => restaurant.id}
+            renderItem={({ item }) => (
+              <View style={styles.modalItem}>
+                <Text>{item.name}</Text>
+                <Button title="Edit" onPress={() => editRestaurant(item.id, { name: 'Updated Name' })} />
+                <Button title="Delete" onPress={() => deleteRestaurant(item.id)} />
+                <Button title="View Bookings" onPress={() => viewBookings(item.id)} />
+              </View>
+            )}
+          />
+          <Button title="Close" onPress={() => setShowRestaurantList(false)} />
+        </View>
+      </Modal>
+      
+      {/* Display booking statistics */}
+      <Text style={styles.title}>Booking Statistics</Text>
+      <Button title="Generate Weekly Stats" onPress={generateBookingStatistics} />
+      <Button title="Generate Monthly Stats" onPress={generateBookingStatistics} />
+      <Text>Weekly Stats: {bookingStats.weeklyStats}</Text>
+      <Text>Monthly Stats: {bookingStats.monthlyStats}</Text>
     </View>
   );
 };
@@ -70,7 +117,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 5,
   },
-  item: {
+  modalContainer: {
+    flex: 1,
+    padding: 20,
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
