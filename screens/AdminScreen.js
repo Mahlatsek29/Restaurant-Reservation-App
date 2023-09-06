@@ -65,8 +65,44 @@ const AdminScreen = () => {
         onPress={() => setShowRestaurantList(true)}
       />
 
-      {/* Rest of your component code */}
-      
+      <FlatList
+        data={restaurants}
+        keyExtractor={(restaurant) => restaurant.id}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <Text>{item.name}</Text>
+            <Icon.Button
+              name="edit" // Replace with the name of the FontAwesome icon you want to use
+              backgroundColor="black"
+              onPress={() => editRestaurant(item.id, { name: 'Updated Name' })}
+            >
+              Edit
+            </Icon.Button>
+            <Icon.Button
+              name="trash" // Replace with the name of the FontAwesome icon for delete
+              backgroundColor="black"
+              onPress={() => deleteRestaurant(item.id)}
+            >
+              Delete
+            </Icon.Button>
+            <Icon.Button
+              name="eye" // Replace with the name of the FontAwesome icon for view
+              backgroundColor="black"
+              onPress={() => viewBookings(item.id)}
+            >
+              View Bookings
+            </Icon.Button>
+          </View>
+        )}
+      />
+
+      <Text style={styles.title}>Booking Statistics</Text>
+      <Button title="Generate Weekly Stats" onPress={generateBookingStatistics} />
+      <Button title="Generate Monthly Stats" onPress={generateBookingStatistics} />
+      <Text>Weekly Stats: {bookingStats.weeklyStats}</Text>
+      <Text>Monthly Stats: {bookingStats.monthlyStats}</Text>
+
+      {/* Modal to display the list of restaurants */}
       <Modal
         visible={showRestaurantList}
         animationType="slide"
@@ -80,22 +116,12 @@ const AdminScreen = () => {
             renderItem={({ item }) => (
               <View style={styles.modalItem}>
                 <Text>{item.name}</Text>
-                <Button title="Edit" onPress={() => editRestaurant(item.id, { name: 'Updated Name' })} />
-                <Button title="Delete" onPress={() => deleteRestaurant(item.id)} />
-                <Button title="View Bookings" onPress={() => viewBookings(item.id)} />
               </View>
             )}
           />
           <Button title="Close" onPress={() => setShowRestaurantList(false)} />
         </View>
       </Modal>
-      
-      {/* Display booking statistics */}
-      <Text style={styles.title}>Booking Statistics</Text>
-      <Button title="Generate Weekly Stats" onPress={generateBookingStatistics} />
-      <Button title="Generate Monthly Stats" onPress={generateBookingStatistics} />
-      <Text>Weekly Stats: {bookingStats.weeklyStats}</Text>
-      <Text>Monthly Stats: {bookingStats.monthlyStats}</Text>
     </View>
   );
 };
