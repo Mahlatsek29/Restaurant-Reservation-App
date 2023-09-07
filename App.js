@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { firebase } from './config';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen';
+import AdminLoginScreen from './screens/AdminLoginScreen';
 import RegistrationScreen from './screens/RegistrationScreen';
 import HomeScreen from './screens/HomeScreen';
 import ReservationListScreen from './screens/ReservationListScreen';
@@ -43,6 +44,11 @@ function App() {
            <Stack.Screen 
         name="Login"
         component={LoginScreen}
+        options={{headerShown: false}}
+        />
+          <Stack.Screen 
+        name="AdminLogin"
+        component={AdminLoginScreen}
         options={{headerShown: false}}
         />
          <Stack.Screen

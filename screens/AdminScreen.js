@@ -1,12 +1,16 @@
+// AdminScreen.js
 import React, { useState } from 'react';
 import { View, Text, Button, TextInput, FlatList, StyleSheet, Modal } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation from React Navigation
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const AdminScreen = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [restaurantName, setRestaurantName] = useState('');
   const [bookingStats, setBookingStats] = useState({ weeklyStats: 0, monthlyStats: 0 });
-  const [showRestaurantList, setShowRestaurantList] = useState(false); 
+  const [showRestaurantList, setShowRestaurantList] = useState(false);
+  const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const navigation = useNavigation(); // Initialize the navigation object
 
   const addRestaurant = () => {
     if (restaurantName.trim() === '') {
@@ -23,25 +27,31 @@ const AdminScreen = () => {
   };
 
   const editRestaurant = (restaurantId, updatedDetails) => {
-  
+    // Implement edit logic here
   };
 
   const deleteRestaurant = (restaurantId) => {
-
+    // Implement delete logic here
   };
 
-  const viewBookings = (restaurantId) => {
-    
-    console.log(`View bookings for restaurant with ID: ${restaurantId}`);
+  const viewReservations = (restaurantId) => {
+    // Implement logic to view reservations for the selected restaurant
+    const selectedRestaurant = restaurants.find((restaurant) => restaurant.id === restaurantId);
+    setSelectedRestaurant(selectedRestaurant);
+    setShowRestaurantList(true);
   };
 
   const generateBookingStatistics = () => {
-
     const calculatedStats = {
-      weeklyStats: 50, 
+      weeklyStats: 50,
       monthlyStats: 200,
     };
     setBookingStats(calculatedStats);
+  };
+
+  // Function to navigate to the home screen
+  const navigateToHome = () => {
+    navigation.navigate('Home'); // Use the screen name defined in your navigator
   };
 
   return (
@@ -54,7 +64,7 @@ const AdminScreen = () => {
         onChangeText={(text) => setRestaurantName(text)}
       />
       <Button title="Add Restaurant" onPress={addRestaurant} />
-      
+
       <Button
         title="View Restaurants"
         onPress={() => setShowRestaurantList(true)}
@@ -67,25 +77,25 @@ const AdminScreen = () => {
           <View style={styles.item}>
             <Text>{item.name}</Text>
             <Icon.Button
-              name="edit" 
+              name="edit"
               backgroundColor="black"
               onPress={() => editRestaurant(item.id, { name: 'Updated Name' })}
             >
               Edit
             </Icon.Button>
             <Icon.Button
-              name="trash" 
+              name="trash"
               backgroundColor="black"
               onPress={() => deleteRestaurant(item.id)}
             >
               Delete
             </Icon.Button>
             <Icon.Button
-              name="eye" 
+              name="eye"
               backgroundColor="black"
-              onPress={() => viewBookings(item.id)}
+              onPress={() => viewReservations(item.id)}
             >
-              View Bookings
+              View Reservations
             </Icon.Button>
           </View>
         )}
@@ -97,6 +107,8 @@ const AdminScreen = () => {
       <Text>Weekly Stats: {bookingStats.weeklyStats}</Text>
       <Text>Monthly Stats: {bookingStats.monthlyStats}</Text>
 
+      <Button title="Navigate to Home" onPress={navigateToHome} />
+
       {/* Modal to display the list of restaurants */}
       <Modal
         visible={showRestaurantList}
@@ -106,11 +118,15 @@ const AdminScreen = () => {
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>List of Restaurants</Text>
           <FlatList
-            data={restaurants}
+            data={selectedRestaurant ? [selectedRestaurant] : []}
             keyExtractor={(restaurant) => restaurant.id}
             renderItem={({ item }) => (
               <View style={styles.modalItem}>
                 <Text>{item.name}</Text>
+                <Button
+                  title="View Reservations"
+                  onPress={() => viewReservations(item.id)}
+                />
               </View>
             )}
           />

@@ -3,25 +3,60 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet } from "react-nativ
 import { useNavigation } from "@react-navigation/native";
 import { firebase } from "../config";
 
-const LoginScreen = () => {
+const AdminLoginScreen = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
-  const loginUser = async (email, password) => {
+
+  const authenticateAdmin = async (email, password) => {
     try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-     
-      navigation.push('Home');
-    
+      const userCredential = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
+      return userCredential.user !== null;
+    } catch (error) {
+      console.error("Admin authentication error: ", error);
+      return false;
+    }
+  };
+
+  const loginAdmin = async (email, password) => {
+    try {
+      // Check if email contains '@tablenumber'
+      if (!email.includes('@tablenumber')) {
+        alert("Admin login failed. Email must contain '@tablenumber'.");
+        return;
+      }
+
+      if (!/\d{3}/.test(password)) {
+        alert("Admin login failed. Password must contain a 3-digit number.");
+        return;
+      }
+
+      const isAdminAuthenticated = await authenticateAdmin(email, password);
+
+      if (isAdminAuthenticated) {
+        navigation.push('Admin');
+      } else {
+        alert("Admin login failed. Please check your credentials.");
+      }
     } catch (error) {
       alert(error.message);
     }
   };
 
+  const resetPassword = async (email) => {
+    try {
+      await firebase.auth().sendPasswordResetEmail(email);
+      alert("Password reset email sent. Please check your inbox.");
+    } catch (error) {
+      alert("Password reset failed. Please check your email and try again.");
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={{ fontWeight: "bold", fontSize: 24 }}>Login</Text>
+      <Text style={{ fontWeight: "bold", fontSize: 24 }}>Admin Login</Text>
       <View>
         <TextInput
           style={styles.textInput}
@@ -40,34 +75,34 @@ const LoginScreen = () => {
         />
       </View>
       <TouchableOpacity
-        onPress={() => loginUser(email, password)}
+        onPress={() => loginAdmin(email, password)}
         style={styles.button}
       >
         <Text style={{ fontWeight: "bold", fontSize: 22, color: "#fff" }}>
-          Login
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Registration")}
-        style={{ marginTop: 20 }}
-      >
-        <Text style={{ fontWeight: "light", fontSize: 16 }}>
-          Don't have an account? Register
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("AdminLogin")}
-        style={{ marginTop: 20 }}
-      >
-        <Text style={{ fontWeight: "light", fontSize: 16 }}>
           Login as Admin
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => resetPassword(email)}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={{ fontWeight: "light", fontSize: 16 }}>
+          Forgot Password?
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Login")}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={{ fontWeight: "light", fontSize: 16 }}>
+          Login as User
         </Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default LoginScreen;
+export default AdminLoginScreen;
 
 const styles = StyleSheet.create({
   container: {

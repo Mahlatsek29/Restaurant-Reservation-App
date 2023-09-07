@@ -85,7 +85,7 @@ const RegistrationScreen = () => {
         
       </View>
     </View>
-  );
+  ); 
 };
 
 export default RegistrationScreen;
