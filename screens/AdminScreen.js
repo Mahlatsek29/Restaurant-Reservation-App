@@ -1,7 +1,7 @@
 // AdminScreen.js
 import React, { useState } from 'react';
 import { View, Text, Button, TextInput, FlatList, StyleSheet, Modal } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation from React Navigation
+import { useNavigation } from '@react-navigation/native'; 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const AdminScreen = () => {
@@ -10,7 +10,7 @@ const AdminScreen = () => {
   const [bookingStats, setBookingStats] = useState({ weeklyStats: 0, monthlyStats: 0 });
   const [showRestaurantList, setShowRestaurantList] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-  const navigation = useNavigation(); // Initialize the navigation object
+  const navigation = useNavigation(); 
 
   const addRestaurant = () => {
     if (restaurantName.trim() === '') {
@@ -27,15 +27,15 @@ const AdminScreen = () => {
   };
 
   const editRestaurant = (restaurantId, updatedDetails) => {
-    // Implement edit logic here
+    
   };
 
   const deleteRestaurant = (restaurantId) => {
-    // Implement delete logic here
+    
   };
 
   const viewReservations = (restaurantId) => {
-    // Implement logic to view reservations for the selected restaurant
+
     const selectedRestaurant = restaurants.find((restaurant) => restaurant.id === restaurantId);
     setSelectedRestaurant(selectedRestaurant);
     setShowRestaurantList(true);
@@ -49,9 +49,9 @@ const AdminScreen = () => {
     setBookingStats(calculatedStats);
   };
 
-  // Function to navigate to the home screen
+  
   const navigateToHome = () => {
-    navigation.navigate('Home'); // Use the screen name defined in your navigator
+    navigation.navigate('Home'); 
   };
 
   return (
