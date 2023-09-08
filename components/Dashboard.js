@@ -32,7 +32,7 @@ const Dashboard = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-        Hello, {name.name}
+        {name.name}  {name.surname}
       </Text>
       <TouchableOpacity onPress={handleLogOut} style={styles.button}>
         <Text style={styles.buttonText}>
