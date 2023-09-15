@@ -12,6 +12,7 @@ import ReservationsScreen from './screens/ReservationsScreen'
 import MakeReservationScreen from './screens/MakeReservationScreen';
 import ConfirmationScreen from './screens/ConfirmationScreen';
 import AdminScreen from './screens/AdminScreen';
+import RestaurantScreen from './screens/RestaurantScreen';
 
 const Stack = createStackNavigator();
 
@@ -85,6 +86,11 @@ function App() {
            <Stack.Screen 
           name="Admin" 
           component={AdminScreen} 
+          options={{headerShown: false}}
+          />
+           <Stack.Screen 
+          name="Restaurant" 
+          component={RestaurantScreen} 
           options={{headerShown: false}}
           />
           </Stack.Navigator>

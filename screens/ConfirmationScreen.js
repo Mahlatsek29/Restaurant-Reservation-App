@@ -42,6 +42,7 @@ const ConfirmationScreen = ({ route }) => {
       const reservation = {
         userName: name,
         userEmail: email,
+        
         restaurantName: reservationData.restaurantName,
         restaurantLocation: reservationData.restaurantLocation,
         date: reservationData.date,
@@ -72,7 +73,7 @@ const ConfirmationScreen = ({ route }) => {
       <Text style={styles.congratulationsMessage}>
         Your reservation at {reservationData.restaurantName} is confirmed. Enjoy your dining experience!
       </Text>
-      <Text style={styles.text}>{name}</Text>
+      <Text style={styles.text}>{name}{surname}</Text>
       <Text style={styles.text}>{email}</Text>
       <View style={styles.detailContainer}>
         <FontAwesome name="cutlery" size={24} color="white" />
