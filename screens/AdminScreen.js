@@ -8,9 +8,17 @@ const AdminScreen = () => {
   const goBackToHome = () => {
     navigation.navigate('Home'); // Navigate back to the Home screen
   };
-
   const goToRestaurantScreen = () => {
     navigation.navigate('Restaurant'); // Navigate to the Restaurant Screen
+  };
+  const goToBookingScreen = () => {
+    navigation.navigate('Bookings'); // Navigate to the Restaurant Screen
+  };
+  const goToMonthlyStatsScreen = () => {
+    navigation.navigate('MonthlyStats'); // Navigate to the Restaurant Screen
+  };
+  const goToArrivalsScreen = () => {
+    navigation.navigate('Arrivals'); // Navigate to the Restaurant Screen
   };
 
   return (
@@ -23,15 +31,15 @@ const AdminScreen = () => {
         <TouchableOpacity style={styles.box} onPress={goToRestaurantScreen}>
           <Text style={styles.title}>Restaurants</Text>
         </TouchableOpacity>
-        <View style={styles.box}>
+        <TouchableOpacity style={styles.box} onPress={goToBookingScreen}>
           <Text style={styles.title}>Bookings</Text>
-        </View>
-        <View style={styles.box}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.box} onPress={goToMonthlyStatsScreen}>
           <Text style={styles.title}>Monthly Stats</Text>
-        </View>
-        <View style={styles.box}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.box} onPress={goToArrivalsScreen}>
           <Text style={styles.title}>Arrivals</Text>
-        </View>
+        </TouchableOpacity>
         <Button title="Home" onPress={goBackToHome} color="black" />
       </View>
     </ImageBackground>

@@ -13,6 +13,9 @@ import MakeReservationScreen from './screens/MakeReservationScreen';
 import ConfirmationScreen from './screens/ConfirmationScreen';
 import AdminScreen from './screens/AdminScreen';
 import RestaurantScreen from './screens/RestaurantScreen';
+import BookingScreen from './screens/BookingScreen';
+import MonthlyStatsScreen from './screens/MonthlyStatsScreen';
+import ArrivalsScreen from './screens/ArrivalsScree';
 
 const Stack = createStackNavigator();
 
@@ -91,6 +94,21 @@ function App() {
            <Stack.Screen 
           name="Restaurant" 
           component={RestaurantScreen} 
+          options={{headerShown: false}}
+          />
+           <Stack.Screen 
+          name="Bookings" 
+          component={BookingScreen} 
+          options={{headerShown: false}}
+          />
+           <Stack.Screen 
+          name="MonthlyStats" 
+          component={ MonthlyStatsScreen} 
+          options={{headerShown: false}}
+          />
+           <Stack.Screen 
+          name="Arrivals" 
+          component={ArrivalsScreen} 
           options={{headerShown: false}}
           />
           </Stack.Navigator>

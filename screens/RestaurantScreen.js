@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Button, TextInput } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Button, TextInput,ScrollView  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const RestaurantScreen = () => {
@@ -54,7 +54,7 @@ const RestaurantScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <View  style={styles.container}>
       <Text style={styles.screenTitle}>Restaurant List</Text>
       <TextInput
         style={styles.input}
@@ -72,6 +72,8 @@ const RestaurantScreen = () => {
           keyExtractor={(item) => item.id}
         />
       )}
+    {/* Add a button to navigate back to the Admin Screen */}
+    <Button title="Back to Admin" onPress={() => navigation.goBack()} />
     </View>
   );
 };
