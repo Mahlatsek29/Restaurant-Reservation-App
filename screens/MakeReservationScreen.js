@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.3)",
     marginBottom: 10,
     paddingLeft: 10,
+    borderRadius: 15,
   },
   backButton: {
     position: "absolute",
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.3)",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 15,
   },
 });
 

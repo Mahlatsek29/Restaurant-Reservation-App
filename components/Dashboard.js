@@ -24,7 +24,7 @@ const Dashboard = () => {
   }, []);
 
   const handleLogOut = () => {
-    firebase.auth().logOut().catch((error) => {
+    firebase.auth().signOut().catch((error) => {
       console.error("Error logging out:", error);
     });
   };
@@ -34,11 +34,11 @@ const Dashboard = () => {
       <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
         {name.name}  {name.surname}
       </Text>
-      <TouchableOpacity onPress={handleLogOut} style={styles.button}>
+      {/* <TouchableOpacity onPress={handleLogOut} style={styles.button}>
         <Text style={styles.buttonText}>
           Log Out
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </SafeAreaView>
   );
 };
