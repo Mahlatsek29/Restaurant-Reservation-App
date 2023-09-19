@@ -59,7 +59,7 @@ const MonthlyStatsScreen = () => {
         style={styles.backButton}
         onPress={() => navigation.goBack()} // Navigate back to the previous screen
       >
-        <Text style={styles.backButtonText}>Back to Admin</Text>
+        <Text style={styles.backButtonText}>Back </Text>
       </TouchableOpacity>
     </View>
   );
@@ -90,7 +90,8 @@ const styles = StyleSheet.create({
   backButtonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "blue",
+    color: "white",
+    backgroundColor: "black",
   },
 });
 

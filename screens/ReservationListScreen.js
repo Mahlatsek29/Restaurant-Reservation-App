@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import restaurants from '../components/Restuarants'; 
@@ -6,11 +6,16 @@ import images from '../components/images';
 
 const RestaurantsListScreen = () => {
   const navigation = useNavigation();
+  const [restaurantList, setRestaurantList] = useState(restaurants);
+
+  const addRestaurantToList = (newRestaurant) => {
+    setRestaurantList([...restaurantList, newRestaurant]);
+  };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.row}>
-        {restaurants.map((restaurant) => (
+        {restaurantList.map((restaurant) => (
           <View style={styles.col} key={restaurant.id}>
             <View style={styles.card}>
               <Image source={images[restaurant.image]} style={styles.cardImgTop} />

@@ -36,7 +36,7 @@ const AdminScreen = () => {
   const handleLogout = async () => {
     try {
       await firebase.auth().signOut(); // Sign the user out
-      navigation.navigate("Login"); // Navigate to the Login screen or your desired destination
+      navigation.navigate("AdminLogin"); // Navigate to the Login screen or your desired destination
     } catch (error) {
       console.error("Error logging out:", error);
     }

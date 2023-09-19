@@ -14,7 +14,7 @@ const restaurants = [
     image: "restaurant2",
     location: "Maboneng Precinct, Johannesburg",
   },
-  {
+  { 
     id: 3,
     name: "Gourmet Gazette",
     description:
@@ -46,6 +46,14 @@ const restaurants = [
     image: "restaurant6",
     location: "Melville, Johannesburg",
   },
+  // {
+  //   id: 7,
+  //   name: "The Hearts Nest",
+  //   description:
+  //     " A cozy, romantic restaurant in South Africa's Winelands region, offering modern South African cuisine and a curated wine selection in an intimate, art-inspired setting",
+  //   image: "restaurant7",
+  //   location: "Stellenbosh, Cape Town",
+  // },
 ];
 
 export default restaurants;

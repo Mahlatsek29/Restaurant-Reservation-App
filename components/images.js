@@ -5,6 +5,8 @@ const images = {
     restaurant4: require('../assets/restaurant4.jpg'),
     restaurant5: require('../assets/restaurant5.jpg'),
     restaurant6: require('../assets/restaurant6.jpg'),
+    restaurant7: require('../assets/restaurant7.jpg'),
+  
 
   };
   

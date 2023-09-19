@@ -69,7 +69,7 @@ const ArrivalsScreen = () => {
         style={styles.backButton}
         onPress={() => navigation.goBack()} // Navigate back to the previous screen
       >
-        <Text style={styles.backButtonText}>Back to Admin</Text>
+        <Text style={styles.backButtonText}>Back </Text>
       </TouchableOpacity>
     </View>
   );
@@ -95,15 +95,15 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     bottom: 20, // Position at the bottom of the screen
-    left: 20,
-    backgroundColor: "blue",
-    padding: 10,
-    borderRadius: 5,
+    right: 20,
+    backgroundColor: "black",
+    padding: 15,
+    borderRadius: 15,
   },
   backButtonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
+    color: "white", // Set text color to white
   },
 });
 

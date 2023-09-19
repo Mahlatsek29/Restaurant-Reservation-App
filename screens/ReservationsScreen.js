@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
@@ -53,6 +54,12 @@ const ReservationScreen = ({ route }) => {
   };
 
   const handleSubmit = () => {
+    if (!selectedDate || !selectedTime) {
+      // If either date or time is not selected, show an alert.
+      Alert.alert("Please select both a date and a time.");
+      return;
+    }
+
     storeReservationData();
     navigation.navigate("MakeReservation", {
       selectedRestaurantName,
@@ -156,7 +163,10 @@ const ReservationScreen = ({ route }) => {
 
       <Text style={styles.guestsLabel}>Number of Guests:</Text>
       <View style={styles.guestsControls}>
-        <TouchableOpacity onPress={handleDecrementGuests} style={styles.guestControlButton}>
+        <TouchableOpacity
+          onPress={handleDecrementGuests}
+          style={styles.guestControlButton}
+        >
           <Text style={styles.guestControlText}>-</Text>
         </TouchableOpacity>
         <TextInput
@@ -166,15 +176,15 @@ const ReservationScreen = ({ route }) => {
           value={numberOfGuests.toString()}
           onChangeText={(text) => setNumberOfGuests(text)}
         />
-        <TouchableOpacity onPress={handleIncrementGuests} style={styles.guestControlButton}>
+        <TouchableOpacity
+          onPress={handleIncrementGuests}
+          style={styles.guestControlButton}
+        >
           <Text style={styles.guestControlText}>+</Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity
-        style={styles.reservationButton}
-        onPress={handleSubmit} 
-      >
+      <TouchableOpacity style={styles.reservationButton} onPress={handleSubmit}>
         <Text style={styles.reservationButtonText}>Make Reservation</Text>
       </TouchableOpacity>
     </View>

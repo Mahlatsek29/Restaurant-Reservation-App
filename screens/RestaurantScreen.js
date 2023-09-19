@@ -1,112 +1,128 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Button, TextInput,ScrollView  } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, Button, StyleSheet, Image, ScrollView } from 'react-native';
+import { firebase } from '../config';
+import images from '../components/images';
 
-const RestaurantScreen = () => {
-  const navigation = useNavigation();
+function RestaurantScreen({ addRestaurantToScreen, addReservationToScreen }) {
   const [restaurants, setRestaurants] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [newRestaurantName, setNewRestaurantName] = useState(''); // State to store the new restaurant name
-
-  // Dummy data for demonstration
-  const initialRestaurants = [
-    { id: '1', name: 'Restaurant 1' },
-    { id: '2', name: 'Restaurant 2' },
-    // Add more initial data here
-  ];
 
   useEffect(() => {
-    // Simulate fetching restaurant data (you can replace this with an API call)
-    setTimeout(() => {
-      setRestaurants(initialRestaurants);
-      setLoading(false);
-    }, 2000); // Simulating a delay
+    const firestore = firebase.firestore();
 
-    // This useEffect will run once, similar to componentDidMount
+    const unsubscribe = firestore
+      .collection('restaurants')
+      .onSnapshot((snapshot) => {
+        const restaurantList = [];
+        snapshot.forEach((doc) => {
+          restaurantList.push({ id: doc.id, ...doc.data() });
+        });
+        setRestaurants(restaurantList);
+      });
+
+    return () => unsubscribe();
   }, []);
 
-  const deleteRestaurant = (id) => {
-    // Simulate deleting a restaurant (you can replace this with actual deletion logic)
-    const updatedRestaurants = restaurants.filter((restaurant) => restaurant.id !== id);
-    setRestaurants(updatedRestaurants);
+  const addRestaurantToFirestore = (restaurant) => {
+    const firestore = firebase.firestore();
+
+    if (
+      restaurant.name &&
+      restaurant.description &&
+      restaurant.image &&
+      restaurant.location
+    ) {
+      firestore
+        .collection('restaurants')
+        .add({
+          name: restaurant.name,
+          description: restaurant.description,
+          image: restaurant.image,
+          location: restaurant.location,
+        })
+        .then((restaurantDocRef) => {
+          // Now, add the reservation to the "reservations" collection
+          firestore
+            .collection('reservations')
+            .add({
+              restaurantId: restaurantDocRef.id,
+              // Add any other reservation data you need here
+            })
+            .then((reservationDocRef) => {
+              // Call the addRestaurant function to update the screen
+              addRestaurantToScreen({
+                id: restaurantDocRef.id,
+                name: restaurant.name,
+                description: restaurant.description,
+                image: restaurant.image,
+                location: restaurant.location,
+              });
+
+              // Optionally, you can also add the reservation data to the reservations list
+              // in the current screen by calling a function like addReservationToList(reservationData);
+            })
+            .catch((reservationError) => {
+              console.error('Error adding reservation to Firestore:', reservationError);
+            });
+        })
+        .catch((restaurantError) => {
+          console.error('Error adding restaurant to Firestore:', restaurantError);
+        });
+    } else {
+      console.error('Invalid restaurant data:', restaurant);
+    }
   };
-
-  const addRestaurant = () => {
-    // Create a new restaurant object with a unique ID
-    const newRestaurant = {
-      id: (restaurants.length + 1).toString(),
-      name: newRestaurantName,
-    };
-
-    // Add the new restaurant to the list
-    setRestaurants([...restaurants, newRestaurant]);
-
-    // Clear the input field
-    setNewRestaurantName('');
-  };
-
-  const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.restaurantItem}>
-      <Text style={styles.restaurantName}>{item.name}</Text>
-      {/* Display other restaurant details */}
-      <Button title="Delete" onPress={() => deleteRestaurant(item.id)} />
-    </TouchableOpacity>
-  );
 
   return (
-    <View  style={styles.container}>
-      <Text style={styles.screenTitle}>Restaurant List</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter a new restaurant name"
-        value={newRestaurantName}
-        onChangeText={(text) => setNewRestaurantName(text)}
-      />
-      <Button title="Add Restaurant" onPress={addRestaurant} />
-      {loading ? (
-        <Text>Loading...</Text>
-      ) : (
-        <FlatList
-          data={restaurants}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />
-      )}
-    {/* Add a button to navigate back to the Admin Screen */}
-    <Button title="Back to Admin" onPress={() => navigation.goBack()} />
-    </View>
+    <ScrollView style={styles.container}>
+      {restaurants.map((restaurant) => (
+        <View key={restaurant.id} style={styles.card}>
+          <Image
+            style={styles.image}
+            source={images[restaurant.image]}
+          />
+          <Text style={styles.name}>{restaurant.name}</Text>
+          <Text style={styles.description}>{restaurant.description}</Text>
+          <Text style={styles.location}>{restaurant.location}</Text>
+          <Button
+            title="Add to Reservations"
+            onPress={() => addRestaurantToFirestore(restaurant)}
+          />
+        </View>
+      ))}
+    </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 20,
+    padding: 20,
   },
-  screenTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  card: {
+    backgroundColor: '#fff',
+    padding: 20,
     marginBottom: 20,
-  },
-  restaurantItem: {
-    backgroundColor: '#f0f0f0',
-    padding: 16,
-    marginBottom: 16,
     borderRadius: 8,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    elevation: 4,
   },
-  restaurantName: {
+  image: {
+    width: '100%',
+    height: 200,
+    marginBottom: 10,
+    borderRadius: 8,
+  },
+  name: {
     fontSize: 18,
     fontWeight: 'bold',
   },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 16,
-    paddingHorizontal: 8,
+  description: {
+    fontSize: 16,
+    marginTop: 8,
+  },
+  location: {
+    fontSize: 14,
+    color: '#888',
+    marginTop: 8,
   },
 });
 
