@@ -15,7 +15,7 @@ import AdminScreen from './screens/AdminScreen';
 import RestaurantScreen from './screens/RestaurantScreen';
 import BookingScreen from './screens/BookingScreen';
 import MonthlyStatsScreen from './screens/MonthlyStatsScreen';
-import ArrivalsScreen from './screens/ArrivalsScree';
+import ArrivalsScreen from './screens/ArrivalsScreen';
 
 const Stack = createStackNavigator();
 

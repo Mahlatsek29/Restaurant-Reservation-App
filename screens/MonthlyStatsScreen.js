@@ -1,52 +1,66 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, Button, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-
-// Mock data for monthly booking statistics (you will replace this with real data)
-const mockMonthlyStats = [
-  { month: 'January', bookings: 200 },
-  { month: 'February', bookings: 220 },
-  { month: 'March', bookings: 240 },
-  { month: 'April', bookings: 280 },
-  { month: 'May', bookings: 320 },
-  { month: 'June', bookings: 350 }, 
-  // Add data for other months
-];
+import React, { useEffect, useState } from "react";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { firebase } from "../config"; // Import your Firebase configuration
+import { useNavigation } from "@react-navigation/native";
 
 const MonthlyStatsScreen = () => {
   const [monthlyStats, setMonthlyStats] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const navigation = useNavigation(); // Access the navigation object
+  const navigation = useNavigation();
 
   useEffect(() => {
-    // Simulate fetching data (replace this with your data fetching logic)
-    setTimeout(() => {
-      setMonthlyStats(mockMonthlyStats);
-      setIsLoading(false);
-    }, 1500); // Simulating a delay for loading data
+    const fetchMonthlyStats = async () => {
+      try {
+        const year = 2023; // Specify the year you want to analyze
+        const monthlyStats = [];
+
+        for (let month = 0; month < 12; month++) {
+          const startDate = new Date(year, month, 1);
+          const endDate = new Date(year, month + 1, 0);
+
+          const reservationsSnapshot = await firebase
+            .firestore()
+            .collection("reservations")
+            .where("date", ">=", startDate)
+            .where("date", "<=", endDate)
+            .get();
+
+          const monthlyTotal = reservationsSnapshot.size;
+
+          monthlyStats.push({
+            month: month + 1, // Month index starts from 0, so we add 1
+            year,
+            totalReservations: monthlyTotal,
+          });
+        }
+
+        setMonthlyStats(monthlyStats);
+      } catch (error) {
+        console.error("Error fetching monthly statistics:", error);
+      }
+    };
+
+    fetchMonthlyStats();
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Monthly Booking Statistics</Text>
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <ScrollView>
-          <FlatList
-            data={monthlyStats}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.statItem}>
-                <Text style={styles.month}>{item.month}</Text>
-                <Text style={styles.bookings}>{item.bookings} Bookings</Text>
-              </View>
-            )}
-          />
-          {/* Add a button to navigate back to the Admin Screen */}
-          <Button title="Back to Admin" onPress={() => navigation.goBack()} />
-        </ScrollView>
-      )}
+      <Text style={styles.header}>Monthly Reservation Statistics</Text>
+      <FlatList
+        data={monthlyStats}
+        keyExtractor={(item) => `${item.year}-${item.month}`}
+        renderItem={({ item }) => (
+          <View style={styles.monthlyStatItem}>
+            <Text>{`${item.year}-${item.month}`}</Text>
+            <Text>Total Reservations: {item.totalReservations}</Text>
+          </View>
+        )}
+      />
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()} // Navigate back to the previous screen
+      >
+        <Text style={styles.backButtonText}>Back to Admin</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -54,29 +68,29 @@ const MonthlyStatsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: '#fff',
+    padding: 20,
+    backgroundColor: "#fff",
   },
-  title: {
+  header: {
     fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
+    fontWeight: "bold",
+    marginBottom: 20,
   },
-  statItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-    padding: 8,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 8,
+  monthlyStatItem: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    padding: 10,
+    marginBottom: 10,
   },
-  month: {
+  backButton: {
+    position: "absolute",
+    bottom: 20, // Position at the bottom of the screen
+    left: 20,
+  },
+  backButtonText: {
     fontSize: 16,
-  },
-  bookings: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    color: "blue",
   },
 });
 

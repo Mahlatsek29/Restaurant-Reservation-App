@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { firebase } from "../config";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [reservations, setReservations] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const user = firebase.auth().currentUser;
@@ -48,13 +50,13 @@ const ProfileScreen = () => {
     }
   };
 
-  const handleLogOut = () => {
-    firebase
-      .auth()
-      .signOut()
-      .catch((error) => {
-        console.error("Error signing out:", error);
-      });
+  const handleLogOut = async () => {
+    try {
+      await firebase.auth().signOut();
+      navigation.navigate('Login'); // Navigate to the Login screen or your desired destination after logout
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
 
   return (
@@ -85,6 +87,7 @@ const ProfileScreen = () => {
           )}
         />
 
+        {/* Logout button */}
         <TouchableOpacity onPress={handleLogOut} style={styles.button}>
           <Text style={styles.buttonText}>Log Out</Text>
         </TouchableOpacity>
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   button: {
-    backgroundColor: "black",
+    backgroundColor: "red",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 25,
@@ -141,7 +144,7 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     padding: 30,
     marginBottom: 10,
-    borderRadius: 25
+    borderRadius: 25,
   },
   reservationItemLabel: {
     color: "white",
