@@ -55,30 +55,30 @@ const HomeScreen = ({ navigation }) => {
           ),
         }}
       />
-  <Tab.Screen
-  name="AdminLogin"
-  component={AdminLoginScreen}
-  options={{
-    tabBarLabel: 'ADMIN',   
-    tabBarIcon: ({ focused, color, size }) => (
-      <Text
-        style={{
-          fontSize: size, 
-          color: focused ? "#000" : "#888",
+      <Tab.Screen
+        name="AdminLogin"
+        component={AdminLoginScreen}
+        options={{
+          tabBarLabel: 'ADMIN',   
+          tabBarIcon: ({ focused, color, size }) => (
+            <Text
+              style={{
+                fontSize: size, 
+                color: focused ? "#000" : "#888",
+              }}
+            >
+              A
+            </Text>
+          ),
         }}
-      >
-        A
-      </Text>
-    ),
-  }}
-/>
+      />
     </Tab.Navigator>
   );
 };
 
 const HomeContent = ({ navigation }) => {
   const handleBookTable = () => {
-    navigation.navigate("ReservationListScreen");
+    navigation.navigate("Reservations"); // Update to use the correct screen name
   };
 
   return (
@@ -91,13 +91,6 @@ const HomeContent = ({ navigation }) => {
           <Dashboard />
         </View>
         <Image source={require("../assets/logo1.png")} style={styles.logo} />
-        {/* <TextInput
-          style={styles.searchBar}
-          placeholder="Search?"
-          placeholderTextColor="#FFFFFF"
-          textAlign="center"
-          textAlignVertical="center"
-        /> */}
       </View>
     </ImageBackground>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity } from "react-native";
-import { firebase } from "../config"; // Import your Firebase configuration
+import { firebase } from "../config"; 
 import { useNavigation } from "@react-navigation/native";
 
 const ArrivalsScreen = () => {
@@ -67,7 +67,7 @@ const ArrivalsScreen = () => {
       />
       <TouchableOpacity
         style={styles.backButton}
-        onPress={() => navigation.goBack()} // Navigate back to the previous screen
+        onPress={() => navigation.goBack()} 
       >
         <Text style={styles.backButtonText}>Back </Text>
       </TouchableOpacity>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    bottom: 20, // Position at the bottom of the screen
+    bottom: 20,
     right: 20,
     backgroundColor: "black",
     padding: 15,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   backButtonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white", // Set text color to white
+    color: "white", 
   },
 });
 

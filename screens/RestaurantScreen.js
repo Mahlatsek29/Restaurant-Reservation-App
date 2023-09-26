@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, Image, ScrollView } from 'react-native';
-import { firebase } from '../config';
+import { View, Text, Button, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { firebase } from '../config'; 
 import images from '../components/images';
 
-function RestaurantScreen({ addRestaurantToScreen, addReservationToScreen }) {
+function RestaurantScreen({ addRestaurantToScreen, navigation }) {
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
@@ -40,36 +40,25 @@ function RestaurantScreen({ addRestaurantToScreen, addReservationToScreen }) {
           location: restaurant.location,
         })
         .then((restaurantDocRef) => {
-          // Now, add the reservation to the "reservations" collection
-          firestore
-            .collection('reservations')
-            .add({
-              restaurantId: restaurantDocRef.id,
-              // Add any other reservation data you need here
-            })
-            .then((reservationDocRef) => {
-              // Call the addRestaurant function to update the screen
-              addRestaurantToScreen({
-                id: restaurantDocRef.id,
-                name: restaurant.name,
-                description: restaurant.description,
-                image: restaurant.image,
-                location: restaurant.location,
-              });
-
-              // Optionally, you can also add the reservation data to the reservations list
-              // in the current screen by calling a function like addReservationToList(reservationData);
-            })
-            .catch((reservationError) => {
-              console.error('Error adding reservation to Firestore:', reservationError);
-            });
+          // Call the addRestaurant function to update the screen
+          addRestaurantToScreen({
+            id: restaurantDocRef.id,
+            name: restaurant.name,
+            description: restaurant.description,
+            image: restaurant.image,
+            location: restaurant.location,
+          });
         })
-        .catch((restaurantError) => {
-          console.error('Error adding restaurant to Firestore:', restaurantError);
+        .catch((error) => {
+          console.error('Error adding restaurant to Firestore:', error);
         });
     } else {
       console.error('Invalid restaurant data:', restaurant);
     }
+  };
+
+  const handleBackToAdmin = () => {
+    navigation.navigate('Admin'); 
   };
 
   return (
@@ -89,6 +78,10 @@ function RestaurantScreen({ addRestaurantToScreen, addReservationToScreen }) {
           />
         </View>
       ))}
+
+      <TouchableOpacity style={styles.backButton} onPress={handleBackToAdmin}>
+        <Text style={styles.backButtonText}>Back </Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -123,6 +116,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#888',
     marginTop: 8,
+  },
+  backButton: {
+    position: "absolute",
+    bottom: 20, 
+    right: 20,
+    backgroundColor: "black",
+    padding: 15,
+    borderRadius: 15,
+  },
+  backButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 

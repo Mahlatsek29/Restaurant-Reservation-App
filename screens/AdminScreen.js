@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   logoutButton: {
     width: windowWidth * 0.48,
     height: 40,
-    backgroundColor: "red", // You can change the color
+    backgroundColor: "white", // You can change the color
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 16,
@@ -115,12 +115,12 @@ const styles = StyleSheet.create({
   logoutButtonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
   },
   homeButton: {
     width: windowWidth * 0.48,
     height: 40,
-    backgroundColor: "green", // You can change the color
+    backgroundColor: "white", // You can change the color
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 16,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   homeButtonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
   },
 });
 

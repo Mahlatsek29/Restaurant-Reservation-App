@@ -84,8 +84,11 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    bottom: 20, // Position at the bottom of the screen
-    left: 20,
+    bottom: 20,
+    right: 20,
+    backgroundColor: "black",
+    padding: 15,
+    borderRadius: 15,
   },
   backButtonText: {
     fontSize: 16,
