@@ -13,7 +13,7 @@ function EditRestaurantScreen({ route, navigation }) {
   };
 
   const handleAdd = () => {
-    onAdd(editedRestaurant.name, editedRestaurant.description, editedRestaurant.image, editedRestaurant.location);
+    onAdd(restaurant.name, restaurant.description, restaurant.image, restaurant.location);
     navigation.goBack();
   };
 

@@ -30,6 +30,11 @@ const RegistrationScreen = () => {
         surname,
         email,
       });
+
+      // Delay the navigation by a few seconds (e.g., 2 seconds)
+      setTimeout(() => {
+        navigation.navigate("Login");
+      }, 2000); // 2000 milliseconds = 2 seconds
     } catch (error) {
       alert(error.message);
     }
