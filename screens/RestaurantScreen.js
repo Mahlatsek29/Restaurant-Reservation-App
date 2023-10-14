@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { firebase } from '../config'; // Verify that the path to Firebase config is correct.
+import { firebase } from '../config';
 import images from '../components/images';
 import { useNavigation } from '@react-navigation/native';
 
@@ -39,12 +39,12 @@ function RestaurantScreen() {
       });
   };
 
-  const navigateToEditScreen = (restaurant) => {
-    navigation.navigate('Edit', {
-      restaurant,
-      onSave: handleEditRestaurant,
-    });
-  };
+ const navigateToEditScreen = (restaurant) => {
+  navigation.navigate('Edit', {
+    restaurant,
+    onSave: handleEditRestaurant,
+  });
+};
 
   const handleEditRestaurant = (editedRestaurant) => {
     const updatedRestaurants = restaurants.map((r) => {

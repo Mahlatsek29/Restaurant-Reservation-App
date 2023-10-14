@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { firebase } from '../config'; 
 import images from '../components/images';
 
-const RestaurantsListScreen = () => {
+const ReservationListScreen = () => {
   const navigation = useNavigation();
   const [restaurantList, setRestaurantList] = useState([]);
 
@@ -102,4 +102,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RestaurantsListScreen;
+export default ReservationListScreen;
