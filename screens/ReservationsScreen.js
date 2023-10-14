@@ -55,7 +55,6 @@ const ReservationScreen = ({ route }) => {
 
   const handleSubmit = () => {
     if (!selectedDate || !selectedTime) {
-      // If either date or time is not selected, show an alert.
       Alert.alert("Please select both a date and a time.");
       return;
     }

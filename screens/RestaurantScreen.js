@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { firebase } from '../config'; 
+import { firebase } from '../config'; // Verify that the path to Firebase config is correct.
 import images from '../components/images';
+import { useNavigation } from '@react-navigation/native';
 
-function RestaurantScreen({ addRestaurantToScreen, navigation }) {
+function RestaurantScreen() {
   const [restaurants, setRestaurants] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const firestore = firebase.firestore();
@@ -23,66 +25,62 @@ function RestaurantScreen({ addRestaurantToScreen, navigation }) {
   }, []);
 
   const addRestaurantToFirestore = (restaurant) => {
-    const firestore = firebase.firestore();
+    
+  };
 
-    if (
-      restaurant.name &&
-      restaurant.description &&
-      restaurant.image &&
-      restaurant.location
-    ) {
-      firestore
-        .collection('restaurants')
-        .add({
-          name: restaurant.name,
-          description: restaurant.description,
-          image: restaurant.image,
-          location: restaurant.location,
-        })
-        .then((restaurantDocRef) => {
-          // Call the addRestaurant function to update the screen
-          addRestaurantToScreen({
-            id: restaurantDocRef.id,
-            name: restaurant.name,
-            description: restaurant.description,
-            image: restaurant.image,
-            location: restaurant.location,
-          });
-        })
-        .catch((error) => {
-          console.error('Error adding restaurant to Firestore:', error);
-        });
-    } else {
-      console.error('Invalid restaurant data:', restaurant);
-    }
+  const deleteRestaurant = (restaurantId) => {
+    const firestore = firebase.firestore();
+    firestore.collection('restaurants').doc(restaurantId).delete()
+      .then(() => {
+
+      })
+      .catch((error) => {
+        console.error('Error deleting restaurant:', error);
+      });
+  };
+
+  const navigateToEditScreen = (restaurant) => {
+    navigation.navigate('Edit', {
+      restaurant,
+      onSave: handleEditRestaurant,
+    });
+  };
+
+  const handleEditRestaurant = (editedRestaurant) => {
+    const updatedRestaurants = restaurants.map((r) => {
+      if (r.id === editedRestaurant.id) {
+        return editedRestaurant;
+      } else {
+        return r;
+      }
+    });
+    setRestaurants(updatedRestaurants);
   };
 
   const handleBackToAdmin = () => {
-    navigation.navigate('Admin'); 
+    navigation.navigate('Admin');
   };
 
   return (
-    <ScrollView style={styles.container}>
-      {restaurants.map((restaurant) => (
-        <View key={restaurant.id} style={styles.card}>
-          <Image
-            style={styles.image}
-            source={images[restaurant.image]}
-          />
-          <Text style={styles.name}>{restaurant.name}</Text>
-          <Text style={styles.description}>{restaurant.description}</Text>
-          <Text style={styles.location}>{restaurant.location}</Text>
-          <Button
-            title="Add to Reservations"
-            onPress={() => addRestaurantToFirestore(restaurant)}
-          />
-        </View>
-      ))}
+    <View style={styles.container}>
+      <ScrollView>
+        {restaurants.map((restaurant) => (
+          <View key={restaurant.id} style={styles.card}>
+            <Image style={styles.image} source={images[restaurant.image]} />
+            <Text style={styles.name}>{restaurant.name}</Text>
+            <Text style={styles.description}>{restaurant.description}</Text>
+            <Text style={styles.location}>{restaurant.location}</Text>
+            <Button title="Add to Reservations" onPress={() => addRestaurantToFirestore(restaurant)} />
+            <Button title="Edit" onPress={() => navigateToEditScreen(restaurant)} />
+            <Button title="Delete" onPress={() => deleteRestaurant(restaurant.id)} />
+          </View>
+        ))}
+      </ScrollView>
 
       <TouchableOpacity style={styles.backButton} onPress={handleBackToAdmin}>
-        <Text style={styles.backButtonText}>Back </Text>
+        <Text style={styles.backButtonText}>Back</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </View>
   );
 }
 
@@ -118,10 +116,10 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   backButton: {
-    position: "absolute",
-    bottom: 20, 
+    position: 'absolute',
+    bottom: 20,
     right: 20,
-    backgroundColor: "black",
+    backgroundColor: 'black',
     padding: 15,
     borderRadius: 15,
   },

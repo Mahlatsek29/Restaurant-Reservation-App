@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import restaurants from '../components/Restuarants'; 
+import { firebase } from '../config'; 
 import images from '../components/images';
 
 const RestaurantsListScreen = () => {
   const navigation = useNavigation();
-  const [restaurantList, setRestaurantList] = useState(restaurants);
+  const [restaurantList, setRestaurantList] = useState([]);
 
-  const addRestaurantToList = (newRestaurant) => {
-    setRestaurantList([...restaurantList, newRestaurant]);
-  };
+  useEffect(() => {
+    const firestore = firebase.firestore();
+    
+    firestore.collection('restaurants').onSnapshot((snapshot) => {
+      const restaurants = [];
+      snapshot.forEach((doc) => {
+        restaurants.push({ id: doc.id, ...doc.data() });
+      });
+      setRestaurantList(restaurants);
+    });
+  }, []);
 
   return (
     <ScrollView style={styles.container}>

@@ -46,14 +46,22 @@ const restaurants = [
     image: "restaurant6",
     location: "Melville, Johannesburg",
   },
-  // {
-  //   id: 7,
-  //   name: "The Hearts Nest",
-  //   description:
-  //     " A cozy, romantic restaurant in South Africa's Winelands region, offering modern South African cuisine and a curated wine selection in an intimate, art-inspired setting",
-  //   image: "restaurant7",
-  //   location: "Stellenbosh, Cape Town",
-  // },
+  {
+    id: 7,
+    name: "The Hearts Nest",
+    description:
+      " A cozy, romantic restaurant in South Africa's Winelands region, offering modern South African cuisine and a curated wine selection in an intimate, art-inspired setting",
+    image: "restaurant7",
+    location: "Stellenbosh, Cape Town",
+  },
+  {
+    id: 8,
+    name: "Safari Spice & Seafood Grill",
+    description:
+      "Located near the Indian Ocean, it offers a unique culinary adventure that combines the flavors of the ocean with the spirit of the African bush.Guests can savor fresh seafood and game meat dishes in an ambiance inspired by an African safari, making it a must-visit destination for those looking to experience the diverse tastes of South Africa while enjoying the coastal vibes of East London.",
+    image: "restaurant10",
+    location: "East London",
+  },
 ];
 
 export default restaurants;

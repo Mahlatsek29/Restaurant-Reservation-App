@@ -53,7 +53,7 @@ const ProfileScreen = () => {
   const handleLogOut = async () => {
     try {
       await firebase.auth().signOut();
-      navigation.navigate('Login'); // Navigate to the Login screen or your desired destination after logout
+      navigation.navigate('Login'); 
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -86,8 +86,6 @@ const ProfileScreen = () => {
             </View>
           )}
         />
-
-        {/* Logout button */}
         <TouchableOpacity onPress={handleLogOut} style={styles.button}>
           <Text style={styles.buttonText}>Log Out</Text>
         </TouchableOpacity>

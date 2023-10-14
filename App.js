@@ -15,7 +15,7 @@ import AdminScreen from './screens/AdminScreen';
 import RestaurantScreen from './screens/RestaurantScreen';
 import BookingScreen from './screens/BookingScreen';
 import MonthlyStatsScreen from './screens/MonthlyStatsScreen';
-import ArrivalsScreen from './screens/ArrivalsScreen';
+import EditRestaurantScreen from './screens/EditRestaurantScreen';
 
 const Stack = createStackNavigator();
 
@@ -101,14 +101,14 @@ function App() {
           component={BookingScreen} 
           options={{headerShown: false}}
           />
-           <Stack.Screen 
-          name="MonthlyStats" 
-          component={ MonthlyStatsScreen} 
+          <Stack.Screen 
+          name="MontlyStats" 
+          component={MonthlyStatsScreen} 
           options={{headerShown: false}}
           />
            <Stack.Screen 
-          name="Arrivals" 
-          component={ArrivalsScreen} 
+          name="Edit" 
+          component={EditRestaurantScreen} 
           options={{headerShown: false}}
           />
           </Stack.Navigator>

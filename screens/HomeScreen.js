@@ -43,7 +43,7 @@ const HomeScreen = ({ navigation }) => {
         }}
       />
       <Tab.Screen
-        name="Reservations"
+        name="Restaurants"
         component={ReservationListScreen}
         options={{
           tabBarIcon: ({ focused }) => (

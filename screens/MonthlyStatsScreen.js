@@ -1,101 +1,72 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { firebase } from "../config"; // Import your Firebase configuration
-import { useNavigation } from "@react-navigation/native";
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import { firebase } from "../config";
 
 const MonthlyStatsScreen = () => {
-  const [monthlyStats, setMonthlyStats] = useState([]);
-  const navigation = useNavigation();
+ const [stats, setStats] = useState([]);
 
-  useEffect(() => {
-    const fetchMonthlyStats = async () => {
-      try {
-        const year = 2023; // Specify the year you want to analyze
-        const monthlyStats = [];
+ useEffect(() => {
+    const fetchData = async () => {
+      const currentDate = new Date();
+      const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
 
-        for (let month = 0; month < 12; month++) {
-          const startDate = new Date(year, month, 1);
-          const endDate = new Date(year, month + 1, 0);
+      const snapshot = await firestore().collection('reservations')
+        .where('date', '>=', firstDayOfMonth)
+        .where('date', '<=', lastDayOfMonth)
+        .get();
 
-          const reservationsSnapshot = await firebase
-            .firestore()
-            .collection("reservations")
-            .where("date", ">=", startDate)
-            .where("date", "<=", endDate)
-            .get();
-
-          const monthlyTotal = reservationsSnapshot.size;
-
-          monthlyStats.push({
-            month: month + 1, // Month index starts from 0, so we add 1
-            year,
-            totalReservations: monthlyTotal,
-          });
-        }
-
-        setMonthlyStats(monthlyStats);
-      } catch (error) {
-        console.error("Error fetching monthly statistics:", error);
-      }
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setStats(data);
     };
 
-    fetchMonthlyStats();
-  }, []);
+    fetchData();
+ }, []);
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Monthly Reservation Statistics</Text>
-      <FlatList
-        data={monthlyStats}
-        keyExtractor={(item) => `${item.year}-${item.month}`}
-        renderItem={({ item }) => (
-          <View style={styles.monthlyStatItem}>
-            <Text>{`${item.year}-${item.month}`}</Text>
-            <Text>Total Reservations: {item.totalReservations}</Text>
-          </View>
-        )}
-      />
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.goBack()} // Navigate back to the previous screen
-      >
-        <Text style={styles.backButtonText}>Back </Text>
-      </TouchableOpacity>
+ const renderItem = ({ item }) => (
+    <View style={styles.item}>
+      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.date}>{item.date.toDateString()}</Text>
     </View>
-  );
+ );
+
+ return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Monthly Stats</Text>
+      <FlatList
+        data={stats}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+      />
+    </View>
+ );
 };
 
 const styles = StyleSheet.create({
-  container: {
+ container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#fff",
-  },
-  header: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    paddingTop: 20,
+ },
+ header: {
     fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  monthlyStatItem: {
-    borderWidth: 1,
-    borderColor: "#ddd",
+    fontWeight: 'bold',
+ },
+ item: {
+    backgroundColor: '#f9c2ff',
+    marginVertical: 8,
     padding: 10,
-    marginBottom: 10,
-  },
-  backButton: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    backgroundColor: "black",
-    padding: 15,
-    borderRadius: 15,
-  },
-  backButtonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "white",
-    backgroundColor: "black",
-  },
+    borderRadius: 5,
+ },
+ title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+ },
+ date: {
+    fontSize: 14,
+    color: 'gray',
+ },
 });
 
 export default MonthlyStatsScreen;

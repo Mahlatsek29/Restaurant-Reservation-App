@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { firebase } from "../config"; // Import your Firebase configuration
+import { View, Text, SectionList, StyleSheet, TouchableOpacity } from "react-native";
+import { firebase } from "../config";
 import { useNavigation } from "@react-navigation/native";
 
 const BookingScreen = () => {
@@ -8,7 +8,6 @@ const BookingScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    // Fetch reservations from Firestore
     const fetchReservations = async () => {
       try {
         const reservationsCollection = await firebase
@@ -28,11 +27,15 @@ const BookingScreen = () => {
     fetchReservations();
   }, []);
 
+  const sections = [
+    { title: "Restaurant", data: reservations },
+  ];
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Reservation List</Text>
-      <FlatList
-        data={reservations}
+      {/* <Text style={styles.header}>Restaurant</Text> */}
+      <SectionList
+        sections={sections}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.reservationItem}>
@@ -44,12 +47,12 @@ const BookingScreen = () => {
             <Text>Guests: {item.guests}</Text>
           </View>
         )}
+        renderSectionHeader={({ section }) => (
+          <Text style={styles.header}>{section.title}</Text>
+        )}
       />
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.goBack()} // Navigate back to the previous screen
-      >
-        <Text style={styles.backButtonText}>Back </Text>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>Back</Text>
       </TouchableOpacity>
     </View>
   );
@@ -74,7 +77,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    bottom: 20, // Position at the bottom of the screen
+    bottom: 20,
     right: 20,
     backgroundColor: "black",
     padding: 15,

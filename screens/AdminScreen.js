@@ -8,35 +8,31 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { firebase } from "../config"; // Import your Firebase configuration
+import { firebase } from "../config"; 
 
 const AdminScreen = () => {
   const navigation = useNavigation();
 
   const goBackToHome = () => {
-    navigation.navigate("Home"); // Navigate back to the Home screen
+    navigation.navigate("Home");
   };
 
   const goToRestaurantScreen = () => {
-    navigation.navigate("Restaurant"); // Navigate to the Restaurant Screen
+    navigation.navigate("Restaurant"); 
   };
 
   const goToBookingScreen = () => {
-    navigation.navigate("Bookings"); // Navigate to the Bookings Screen
+    navigation.navigate("Bookings");
   };
-
   const goToMonthlyStatsScreen = () => {
-    navigation.navigate("MonthlyStats"); // Navigate to the Monthly Stats Screen
+    navigation.navigate("MonthlyStats");
   };
 
-  const goToArrivalsScreen = () => {
-    navigation.navigate("Arrivals"); // Navigate to the Arrivals Screen
-  };
 
   const handleLogout = async () => {
     try {
-      await firebase.auth().signOut(); // Sign the user out
-      navigation.navigate("AdminLogin"); // Navigate to the Login screen or your desired destination
+      await firebase.auth().signOut();
+      navigation.navigate("AdminLogin");
     } catch (error) {
       console.error("Error logging out:", error);
     }
@@ -44,7 +40,7 @@ const AdminScreen = () => {
 
   return (
     <ImageBackground
-      source={require("../assets/admin.jpg")} // Adjust the path to your image
+      source={require("../assets/admin.jpg")}
       style={styles.background}
     >
       <View style={styles.container}>
@@ -55,11 +51,8 @@ const AdminScreen = () => {
         <TouchableOpacity style={styles.box} onPress={goToBookingScreen}>
           <Text style={styles.title}>Bookings</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.box} onPress={goToMonthlyStatsScreen}>
+        <TouchableOpacity style={styles.box} onPress={goToBookingScreen}>
           <Text style={styles.title}>Monthly Stats</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.box} onPress={goToArrivalsScreen}>
-          <Text style={styles.title}>Arrivals</Text>
         </TouchableOpacity>
         {/* Home button */}
         <TouchableOpacity style={styles.homeButton} onPress={goBackToHome}>
@@ -80,19 +73,19 @@ const windowHeight = Dimensions.get("window").height;
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    resizeMode: "cover", // Cover the entire screen
-    justifyContent: "center", // Center vertically
-    alignItems: "center", // Center horizontally
+    resizeMode: "cover",
+    justifyContent: "center", 
+    alignItems: "center", 
   },
   container: {
     flex: 1,
-    justifyContent: "center", // Center vertically
-    alignItems: "center", // Center horizontally
+    justifyContent: "center", 
+    alignItems: "center", 
   },
   box: {
-    width: windowWidth * 0.48, // Adjust the width as needed
-    height: 150, // Adjust the height as needed
-    backgroundColor: "black", // Set background color to black
+    width: windowWidth * 0.48, 
+    height: 150, 
+    backgroundColor: "black", 
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 16,
@@ -101,12 +94,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "white", // Set text color to white
+    color: "white", 
   },
   logoutButton: {
     width: windowWidth * 0.48,
     height: 40,
-    backgroundColor: "white", // You can change the color
+    backgroundColor: "white", 
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 16,
@@ -120,7 +113,7 @@ const styles = StyleSheet.create({
   homeButton: {
     width: windowWidth * 0.48,
     height: 40,
-    backgroundColor: "white", // You can change the color
+    backgroundColor: "white", 
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 16,
