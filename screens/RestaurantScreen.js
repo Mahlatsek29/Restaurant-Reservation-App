@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Button, Image, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native'; // Import SafeAreaView
 import { firebase } from '../config';
 import images from '../components/images';
 import { useNavigation } from '@react-navigation/native';
@@ -62,29 +62,35 @@ function RestaurantScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        {restaurants.map((restaurant) => (
-          <View key={restaurant.id} style={styles.card}>
-            <Image style={styles.image} source={images[restaurant.image]} />
-            <Text style={styles.name}>{restaurant.name}</Text>
-            <Text style={styles.description}>{restaurant.description}</Text>
-            <Text style={styles.location}>{restaurant.location}</Text>
-            <Button title="Add to Reservations" onPress={() => addRestaurantToFirestore(restaurant)} />
-            <Button title="Edit" onPress={() => navigateToEditScreen(restaurant)} />
-            <Button title="Delete" onPress={() => deleteRestaurant(restaurant.id)} />
-          </View>
-        ))}
-      </ScrollView>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <ScrollView>
+          {restaurants.map((restaurant) => (
+            <View key={restaurant.id} style={styles.card}>
+              <Image style={styles.image} source={images[restaurant.image]} />
+              <Text style={styles.name}>{restaurant.name}</Text>
+              <Text style={styles.description}>{restaurant.description}</Text>
+              <Text style={styles.location}>{restaurant.location}</Text>
+              <Button title="Add to Reservations" onPress={() => addRestaurantToFirestore(restaurant)} />
+              <Button title="Edit" onPress={() => navigateToEditScreen(restaurant)} />
+              <Button title="Delete" onPress={() => deleteRestaurant(restaurant.id)} />
+            </View>
+          ))}
+        </ScrollView>
 
-      <TouchableOpacity style={styles.backButton} onPress={handleBackToAdmin}>
-        <Text style={styles.backButtonText}>Back</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity style={styles.backButton} onPress={handleBackToAdmin}>
+          <Text style={styles.backButtonText}>Back</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = {
+  safeArea: {
+    flex: 1,
+    backgroundColor: 'grey',
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -128,6 +134,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-});
+};
 
 export default RestaurantScreen;

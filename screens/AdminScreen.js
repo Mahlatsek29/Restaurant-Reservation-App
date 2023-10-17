@@ -6,6 +6,7 @@ import {
   Dimensions,
   ImageBackground,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { firebase } from "../config"; 
@@ -24,10 +25,10 @@ const AdminScreen = () => {
   const goToBookingScreen = () => {
     navigation.navigate("Bookings");
   };
+
   const goToMonthlyStatsScreen = () => {
     navigation.navigate("MonthlyStats");
   };
-
 
   const handleLogout = async () => {
     try {
@@ -39,31 +40,33 @@ const AdminScreen = () => {
   };
 
   return (
-    <ImageBackground
-      source={require("../assets/admin.jpg")}
-      style={styles.background}
-    >
-      <View style={styles.container}>
-        {/* Your existing buttons */}
-        <TouchableOpacity style={styles.box} onPress={goToRestaurantScreen}>
-          <Text style={styles.title}>Restaurants</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.box} onPress={goToBookingScreen}>
-          <Text style={styles.title}>Bookings</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.box} onPress={goToBookingScreen}>
-          <Text style={styles.title}>Monthly Stats</Text>
-        </TouchableOpacity>
-        {/* Home button */}
-        <TouchableOpacity style={styles.homeButton} onPress={goBackToHome}>
-          <Text style={styles.homeButtonText}>Home</Text>
-        </TouchableOpacity>
-        {/* Logout button */}
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutButtonText}>Logout</Text>
-        </TouchableOpacity>
-      </View>
-    </ImageBackground>
+    <SafeAreaView style={styles.safeArea}>
+      <ImageBackground
+        source={require("../assets/admin.jpg")}
+        style={styles.background}
+      >
+        <View style={styles.container}>
+          {/* Your existing buttons */}
+          <TouchableOpacity style={styles.box} onPress={goToRestaurantScreen}>
+            <Text style={styles.title}>Restaurants</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.box} onPress={goToBookingScreen}>
+            <Text style={styles.title}>Bookings</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.box} onPress={goToMonthlyStatsScreen}>
+            <Text style={styles.title}>Monthly Stats</Text>
+          </TouchableOpacity>
+          {/* Home button */}
+          <TouchableOpacity style={styles.homeButton} onPress={goBackToHome}>
+            <Text style={styles.homeButtonText}>Home</Text>
+          </TouchableOpacity>
+          {/* Logout button */}
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <Text style={styles.logoutButtonText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
+    </SafeAreaView>
   );
 };
 
@@ -71,21 +74,25 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "grey", 
+  },
   background: {
     flex: 1,
     resizeMode: "cover",
-    justifyContent: "center", 
-    alignItems: "center", 
+    justifyContent: "center",
+    alignItems: "center",
   },
   container: {
     flex: 1,
-    justifyContent: "center", 
-    alignItems: "center", 
+    justifyContent: "center",
+    alignItems: "center",
   },
   box: {
-    width: windowWidth * 0.48, 
-    height: 150, 
-    backgroundColor: "black", 
+    width: windowWidth * 0.48,
+    height: 150,
+    backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 16,
@@ -94,12 +101,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "white", 
+    color: "white",
   },
   logoutButton: {
     width: windowWidth * 0.48,
     height: 40,
-    backgroundColor: "white", 
+    backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 16,
@@ -113,7 +120,7 @@ const styles = StyleSheet.create({
   homeButton: {
     width: windowWidth * 0.48,
     height: 40,
-    backgroundColor: "white", 
+    backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 16,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SectionList, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, SectionList, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
 import { firebase } from "../config";
 import { useNavigation } from "@react-navigation/native";
 
@@ -32,37 +32,38 @@ const BookingScreen = () => {
   ];
 
   return (
-    <View style={styles.container}>
-      {/* <Text style={styles.header}>Restaurant</Text> */}
-      <SectionList
-        sections={sections}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.reservationItem}>
-            <Text>Name: {item.userName}</Text>
-            <Text>Email: {item.userEmail}</Text>
-            <Text>Restaurant: {item.restaurantName}</Text>
-            <Text>Date: {item.date}</Text>
-            <Text>Time: {item.time}</Text>
-            <Text>Guests: {item.guests}</Text>
-          </View>
-        )}
-        renderSectionHeader={({ section }) => (
-          <Text style={styles.header}>{section.title}</Text>
-        )}
-      />
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>Back</Text>
-      </TouchableOpacity>
-    </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#ccc" }}>
+      <View style={styles.container}>
+        <SectionList
+          sections={sections}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.reservationItem}>
+              <Text>Name: {item.userName}</Text>
+              <Text>Email: {item.userEmail}</Text>
+              <Text>Restaurant: {item.restaurantName}</Text>
+              <Text>Date: {item.date}</Text>
+              <Text>Time: {item.time}</Text>
+              <Text>Guests: {item.guests}</Text>
+            </View>
+          )}
+          renderSectionHeader={({ section }) => (
+            <Text style={styles.header}>{section.title}</Text>
+          )}
+        />
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Text style={styles.backButtonText}>Back</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#fff",
+    // padding: 20,
+    backgroundColor: "white",
   },
   header: {
     fontSize: 24,
