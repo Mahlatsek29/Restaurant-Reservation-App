@@ -8,7 +8,7 @@ function EditRestaurantScreen({ route, navigation }) {
   const [editedRestaurant, setEditedRestaurant] = useState({ ...restaurant });
 
   const handleSave = () => {
-    onSave(editedRestaurant);
+    onSave({ ...editedRestaurant }); // Pass a copy of editedRestaurant to onSave
     navigation.goBack();
   };
 

@@ -26,9 +26,9 @@ const AdminScreen = () => {
     navigation.navigate("Bookings");
   };
 
-  const goToMonthlyStatsScreen = () => {
-    navigation.navigate("MonthlyStats");
-  };
+  // const goToMonthlyStatsScreen = () => {
+  //   navigation.navigate("MonthlyStats");
+  // };
 
   const handleLogout = async () => {
     try {
@@ -53,9 +53,9 @@ const AdminScreen = () => {
           <TouchableOpacity style={styles.box} onPress={goToBookingScreen}>
             <Text style={styles.title}>Bookings</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.box} onPress={goToMonthlyStatsScreen}>
+          {/* <TouchableOpacity style={styles.box} onPress={goToMonthlyStatsScreen}>
             <Text style={styles.title}>Monthly Stats</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           {/* Home button */}
           <TouchableOpacity style={styles.homeButton} onPress={goBackToHome}>
             <Text style={styles.homeButtonText}>Home</Text>

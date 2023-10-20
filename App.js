@@ -14,7 +14,7 @@ import ConfirmationScreen from './screens/ConfirmationScreen';
 import AdminScreen from './screens/AdminScreen';
 import RestaurantScreen from './screens/RestaurantScreen';
 import BookingScreen from './screens/BookingScreen';
-import MonthlyStatsScreen from './screens/MonthlyStatsScreen';
+// import MonthlyStatsScreen from './screens/MonthlyStatsScreen';
 import EditRestaurantScreen from './screens/EditRestaurantScreen';
 
 const Stack = createStackNavigator();
@@ -101,11 +101,11 @@ function App() {
           component={BookingScreen} 
           options={{headerShown: false}}
           />
-          <Stack.Screen 
+          {/* <Stack.Screen 
           name="MontlyStats" 
           component={MonthlyStatsScreen} 
           options={{headerShown: false}}
-          />
+          /> */}
            <Stack.Screen 
           name="Edit" 
           component={EditRestaurantScreen} 
